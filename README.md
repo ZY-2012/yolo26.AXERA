@@ -2,29 +2,45 @@
 
 YOLO26n 在 AX620E（AX630C）上的 **U8 / U16 / 混合量化** 推理对比复现：主机负责导出与量化，板端负责推理与 CPU 占用对比。
 
-回答一个具体问题：
-
-> U8 和 U16 量化所有算子都在 NPU，为什么混合量化的时候有些算子跑在了 CPU？
-
 **结论：混合量化不会把算子放到 CPU。** 三个模型编译后都只有 1 个 NPU 子图、0 个 CPU 子图；板端 CPU 占用只由「每帧固定的 host 开销 ÷ 单帧耗时」决定，与量化精度分配无关。
+
+## 目录结构
+
+```
+host/        主机执行：run_all.sh + 01~05 分步脚本
+board/       板端执行：run_bench.sh + bench_cpu.py + summarize.py
+scripts/     主机脚本调用的 Python 实现（导出 / 拆图 / 校准集 / 生成配置 / 公共环境）
+configs/     Pulsar2 配置：u8.json / u16.json / mix.json（原配置 customer_exp_e3_mix.json）
+onnx/        yolo26n.onnx（one2one 头切成 output_split_0/1/2）
+models/      三个编译好的 axmodel
+results/     每轮 benchmark JSON、comparison.json、精度与编译摘要
+logs/        Pulsar2 编译日志
+reports/     summary.md（完整分析报告）
+```
+
+## 数据文件
+
+- `results/comparison.json`：三模型板端汇总（含 native / host overhead）
+- `results/bench_<model>_r<1..3>.json`：原始每轮数据
+- `results/ax_run_model.txt`：板端原生工具交叉验证
+- `results/precision_summary.json`：量化精度分析（输出 cosine）
+- `results/build_summary.json`：编译产物子图 / MACs / cycles
+- `reports/summary.md`：完整中文分析报告
+- `logs/{u8,u16,mix}.log`：Pulsar2 完整日志
 
 ## 分工
 
 | 阶段 | 在哪执行 | 命令 | 产出 |
 |------|----------|------|------|
 | 导出 ONNX → 拆图 → 校准集 → 生成配置 → **量化编译** | 主机（x86 + Pulsar2） | `bash host/run_all.sh` | `models/yolo26n_{u8,u16,e3_mix}.axmodel` |
-| **推理 / 延迟 / CPU 占用对比** | 板端（AX620E，自行登入） | `bash board/run_bench.sh` | `board/results/*.json` + 终端对比表 |
+| **推理 / 延迟 / CPU 占用对比** | 板端（AX620Q/AX630C） | `bash board/run_bench.sh` | `board/results/*.json` + 终端对比表 |
 
 ## 主机执行（导出 + 量化）
 
 **前置条件**
 
 1. Python 环境里安装好 ultralytics（导出 ONNX 用）：`pip install ultralytics`
-2. **激活 Pulsar2 环境**，确保 `pulsar2` 命令可用，例如：
-   ```bash
-   source /path/to/pulsar2_env/bin/activate    # venv / conda
-   # 或客户自己惯用的环境激活脚本
-   ```
+2. **Pulsar2 环境**：激活后确保 `pulsar2` 命令可用（`host/05_compile.sh` 会检查并提示）
 
 **一键执行**
 
@@ -37,16 +53,16 @@ bash host/run_all.sh
 | 步骤 | 脚本 | 做什么 | 产物 |
 |------|------|--------|------|
 | 1 | `host/01_export_onnx.sh` | 下载公开 `yolo26n.pt`（end2end）并导出固定 640 ONNX | `onnx/yolo26n.onnx` |
-| 2 | `host/02_split_onnx.sh` | 把 end2end 的 one2one 头按 P3/P4/P5 切成三个输出，对齐客户混合配置里的 layer 名与 `output_processors` | 就地覆盖 `onnx/yolo26n.onnx`（三输出） |
+| 2 | `host/02_split_onnx.sh` | 把 end2end 的 one2one 头按 P3/P4/P5 切成三个输出，对齐混合配置里的 layer 名与 `output_processors` | 就地覆盖 `onnx/yolo26n.onnx`（三输出） |
 | 3 | `host/03_prepare_calibration.sh` | 生成 100 张真实图校准集（首次自动下 coco128） | `dataset/images100.tar` |
-| 4 | `host/04_make_configs.sh` | 从客户 `configs/customer_exp_e3_mix.json` 生成三份配置 | `configs/{u8,u16,mix}.json` |
+| 4 | `host/04_make_configs.sh` | 从 `configs/customer_exp_e3_mix.json` 生成三份配置 | `configs/{u8,u16,mix}.json` |
 | 5 | `host/05_compile.sh` | `pulsar2 build` 量化编译（AX620E / NPU2） | `build/*/*.axmodel` 并复制到 `models/` |
 
 三份量化配置的区别：
 
 - `u8.json`：全部算子 U8（对照组）
 - `u16.json`：全部算子 U16（`DEFAULT → U16`）
-- `mix.json`：客户 `exp_e3_mix.json` 原样，只把 42 个节点设为 U16（`/model.10` C2PSA、`/model.22` attention、`/model.19`、`/model.23/one2one_cv2/cv3` 各尺度），其余 U8
+- `mix.json`： `exp_e3_mix.json` 原样，只把 42 个节点设为 U16（`/model.10` C2PSA、`/model.22` attention、`/model.19`、`/model.23/one2one_cv2/cv3` 各尺度），其余 U8
 
 > 想用自己的业务图片做校准：直接替换 `dataset/images100.tar`（100 张图打包，文件名任意）再重新执行第 5 步即可。
 
@@ -55,7 +71,7 @@ bash host/run_all.sh
 把主机生成的 `models/` 和仓库里的 `board/` 放到板子同一父目录，登入板子一键运行：
 
 ```bash
-# 1. 主机上拷贝（板子 IP 换成你们的）
+# 1. 主机上拷贝（板子 IP 换成实际地址）
 scp -r models board root@<板子IP>:/root/yolo26_bench/
 
 # 2. 登入板子
@@ -67,7 +83,7 @@ bash run_bench.sh
 `run_bench.sh` 自动完成（无参数、无环境变量）：
 
 1. 空载 CPU 基线（5 s）
-2. U8 / 混合 / U16 三个模型各跑 3 轮 × 100 次，输出与客户截图同字段的 `Benchmark Results`（Repeat / Total / Avg / Min / Max / P50 / P90 / P99 / CPU usage / Throughput）
+2. U8 / 混合 / U16 三个模型各跑 3 轮 × 100 次，输出 `Benchmark Results`（Repeat / Total / Avg / Min / Max / P50 / P90 / P99 / CPU usage / Throughput）
 3. 有 `/opt/bin/ax_run_model` 时自动做纯 NPU 交叉验证
 4. 最后打印汇总对比表，原始数据写入 `results/`
 
@@ -100,50 +116,11 @@ bash run_bench.sh
 - 混合：4.81 / 13.81 = 34.9%（实测 34.7%）
 - U16：4.70 / 19.98 = 23.5%（实测 23.7%）
 
-即模型越快、每秒处理的帧数越多，CPU 占用**反而越高**；混合模型的 CPU 占用介于 U8 与 U16 之间是速度差异导致，与「算子跑 CPU」无关。客户截图中 54.9% @ 47.6 ms 折合约 26 ms/帧的 CPU 工作，远超推理链路的固定 host 开销，建议按同一口径排查 demo 自身的逐帧后处理（decode / NMS / 画图 / 拷贝 / 日志）。
-
-## 中间步骤答疑
-
-- **为什么要切成 `output_split_0/1/2`？** 客户的 `exp_e3_mix.json` 是按这个结构写的：3 个尺度各一个 `1×84×H×W` 输出（84 = 4 框 + 80 类），`output_processors` 里对它们做 `dst_perm=[0,2,3,1]`。我们导出时用 one2one（end2end）头并切成同样结构，保证客户配置的 42 个 layer 名 100% 命中。
-- **混合量化到底做了什么？** 只把 attention/分类头等 42 个节点标成 U16，其余保持 U8，以更小的代价换精度。它只改变量化位宽，不改变算子归属。
-- **怎么确认 axmodel 里没有 CPU 算子？** 看编译日志：`GraphType.NPU` 子图数量、`fuse N subgraph(s)`；本次三个模型均为 1 个 NPU 子图、0 个 CPU 子图。板端 `ax_run_model` 与 Python 推理也都能完整跑通。
-- **CPU 为什么报两个数？** `system` 是整机 `/proc/stat`（全部核 0–100%），`process` 是本次 Python 进程的 CPU 时间占比（单核=100%）。客户截图更接近系统口径。
-- **为什么全 U16 的 MACs/cycles 是 U8 的两倍？** AX620E NPU 上 U16 的吞吐低于 U8，算力消耗翻倍，所以 U16 延迟最高、CPU 占比反而最低。
-
-## 常见问题
-
-- `pulsar2: command not found` → 先激活 Pulsar2 环境再执行 `host/05_compile.sh`（或 `host/run_all.sh`）。
-- 板端 `import axengine` 报 No providers / 找不到 so → 设置 `LD_LIBRARY_PATH=/opt/lib`（`board/run_bench.sh` 已自动设置；若板子 so 在别处，改脚本第一行即可）。
-- 板子没有 `/opt/bin/ax_run_model` → 脚本自动跳过原生交叉验证，只输出 Python 结果。
-- 编译产物在哪 → `build/u8|u16|mix/*.axmodel`，同时复制在 `models/`；精度逐层表在 `build/<变体>/quant/debug/precision_analysis_table.txt`。
-
-## 目录结构
-
-```
-host/        主机执行：run_all.sh + 01~05 分步脚本
-board/       板端执行：run_bench.sh + bench_cpu.py + summarize.py
-scripts/     主机脚本调用的 Python 实现（导出 / 拆图 / 校准集 / 生成配置 / 公共环境）
-configs/     Pulsar2 配置：u8.json / u16.json / mix.json（客户原配置 customer_exp_e3_mix.json）
-onnx/        yolo26n.onnx（one2one 头切成 output_split_0/1/2）
-models/      三个编译好的 axmodel
-results/     每轮 benchmark JSON、comparison.json、精度与编译摘要
-logs/        Pulsar2 编译日志
-reports/     summary.md（完整分析报告）
-```
-
-## 数据文件
-
-- `results/comparison.json`：三模型板端汇总（含 native / host overhead）
-- `results/bench_<model>_r<1..3>.json`：原始每轮数据
-- `results/ax_run_model.txt`：板端原生工具交叉验证
-- `results/precision_summary.json`：量化精度分析（输出 cosine）
-- `results/build_summary.json`：编译产物子图 / MACs / cycles
-- `reports/summary.md`：完整中文分析报告
-- `logs/{u8,u16,mix}.log`：Pulsar2 完整日志
+即模型越快、每秒处理的帧数越多，CPU 占用**反而越高**；混合模型的 CPU 占用介于 U8 与 U16 之间是速度差异导致，与「算子跑 CPU」无关。
 
 ## 参考
 
-- [Abandon-ht/YOLO26.axera](https://github.com/Abandon-ht/YOLO26.axera)：one2one 头 NPU 导出思路
+- [Abandon-ht/YOLO26.axera](https://github.com/Abandon-ht/YOLO26.axera)：one2one 头 NPU 导出
 - [ultralytics](https://github.com/ultralytics/ultralytics)：模型与导出框架
 
 ## License

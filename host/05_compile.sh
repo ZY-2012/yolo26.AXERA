@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # 主机执行 5/5：量化编译（AX620E / NPU2），产出 models/*.axmodel。
 #
-# 重要：请先激活客户的 Pulsar2 环境，确保 `pulsar2` 命令可用，例如：
+# 重要：请先激活 Pulsar2 环境，确保 `pulsar2` 命令可用，例如：
 #   source /path/to/pulsar2_env/bin/activate     # Python venv / conda
-#   source /path/to/npu_dev                      # 或客户自己的环境激活脚本
+#   source /path/to/npu_dev                      # 或自有的环境激活脚本
 # 然后执行： bash host/05_compile.sh
 set -euo pipefail
 

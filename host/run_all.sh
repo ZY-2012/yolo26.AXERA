@@ -2,7 +2,7 @@
 # 主机一键执行：导出 ONNX → 拆图 → 校准集 → 生成配置 → Pulsar2 量化编译。
 # 前置条件：
 #   1) Python 环境里有 ultralytics（导出用）
-#   2) 量化前先激活客户的 Pulsar2 环境，确保 `pulsar2` 命令可用（见 05_compile.sh）
+#   2) 量化前先激活 Pulsar2 环境，确保 `pulsar2` 命令可用（见 05_compile.sh）
 set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 

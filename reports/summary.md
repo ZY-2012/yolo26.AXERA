@@ -1,9 +1,9 @@
 # YOLO26n × AX620E(AX630C) U8 / U16 / 混合量化 CPU 占用对比复现
 
 日期：2026-09-18
-板子：`root@10.126.29.186`（AX630C_CHIP / ChipType.MC20E，2 核，engine 2.7.2a）
+板子：`root@<board-ip>`（AX630C_CHIP / ChipType.MC20E，2 核，engine 2.7.2a）
 工具链：Pulsar2 7.0（主机激活 Pulsar2 环境后执行 `pulsar2 build`）
-模型：公开 ultralytics `yolo26n.pt`，end2end one2one 头切成 3 个输出（`output_split_0/1/2`，1×84×80×80 / 1×84×40×40 / 1×84×20×20），对齐客户 `exp_e3_mix.json` 的 42 个 layer 名与 output_processors。
+模型：公开 ultralytics `yolo26n.pt`，end2end one2one 头切成 3 个输出（`output_split_0/1/2`，1×84×80×80 / 1×84×40×40 / 1×84×20×20），对齐 `exp_e3_mix.json` 的 42 个 layer 名与 output_processors。
 校准集：`dataset/images100.tar`（coco128 取 100 张）。
 
 ## 结论（先看这里）
@@ -15,7 +15,7 @@
    三种模型的 Python 与 `ax_run_model` 原生延迟差都是 **~4.8 ms**（host 侧固定开销），
    进程 CPU% ≈ 4.8 / 延迟，实测 43.2% / 23.6% / 34.7% 完全吻合。
    混合模型 CPU 介于 U8/U16 之间，是因为它比 U16 快、同时又比 U8 慢，不是因为它多了 CPU 算子。
-3. 客户截图 `CPU usage 54.9% @ 47.6ms` 换算约 **26 ms/帧的 host CPU 工作量**，远超本复现的 ~4.8 ms，
+3. 参考截图 `CPU usage 54.9% @ 47.6ms` 换算约 **26 ms/帧的 host CPU 工作量**，远超本复现的 ~4.8 ms，
    说明其 CPU 占用主要来自 demo 侧的逐帧后处理（decode/NMS/画图/拷贝等），与量化精度分配无关。
 
 ## 编译产物对比（AX620E，NPU2）
@@ -24,7 +24,7 @@
 |------|--------|--------------------------|------|-------------|---------|
 | U8（全 U8） | 0 | 0.99914 / 0.99077 / 0.97568 | 2.74 G | 6.00 M | 2.75 MB |
 | U16（全 U16） | DEFAULT→U16 | 0.99996 / 0.99902 / 0.99743 | 5.60 G | 13.57 M | 3.38 MB |
-| 混合（客户配置） | 42 个节点 | 0.99937 / 0.99105 / 0.97860 | 3.36 G | 8.34 M | 3.07 MB |
+| 混合（`exp_e3_mix.json`） | 42 个节点 | 0.99937 / 0.99105 / 0.97860 | 3.36 G | 8.34 M | 3.07 MB |
 
 - 混合配置的 42 个 U16 layer 全部命中并生效（Layer Config Table 确认，含 `/model.10` C2PSA attn、`/model.22` attn、`/model.23/one2one_cv2/cv3` 各尺度、`/model.19`）。
 - 校准/编译日志无 unsupported / fallback 警告；U16 使 MACs 和 cycles 约为 U8 的 2 倍。
@@ -54,11 +54,11 @@
 - 交叉验证：`/opt/bin/ax_run_model -w 10 -r 100`（纯 NPU，无 Python/后处理）。
 - `LD_LIBRARY_PATH=/opt/lib`（板端 axengine 0.1.3 需要）。
 
-## 对客户问题的建议回复
+## CPU 占用差异的解释建议
 
-> U8、U16、混合量化编译出来的 axmodel 都只有 NPU 子图，不存在“部分算子跑 CPU”的情况；Pulsar2 的编译日志和产物结构可以直接给客户看（`GraphType.NPU` ×1，无 `GraphType.CPU`）。
+> U8、U16、混合量化编译出来的 axmodel 都只有 NPU 子图，不存在“部分算子跑 CPU”的情况；Pulsar2 的编译日志和产物结构可直接作为依据（`GraphType.NPU` ×1，无 `GraphType.CPU`）。
 > 板端 CPU 占用主要来自推理循环里每帧固定的 host 开销（输入准备、输出 dequant/搬运、Python 框架开销，约 4.8 ms/帧），以及 demo 自身做的后处理。模型越快（U8 > 混合 > U16），每秒处理的帧数越多，CPU 占用反而越高：实测进程 CPU 分别为 42.7% / 34.7% / 23.7%。
-> 客户截图 54.9% @ 47.6 ms，按同一口径换算约 26 ms/帧的 CPU 工作，明显超出纯推理链路的 host 开销，建议排查其 demo 的后处理/画图/日志等逐帧 CPU 逻辑，或说明其 CPU usage 的采样方式。
+> 参考截图 54.9% @ 47.6 ms，按同一口径换算约 26 ms/帧的 CPU 工作，明显超出纯推理链路的 host 开销，建议排查其 demo 的后处理/画图/日志等逐帧 CPU 逻辑，或说明其 CPU usage 的采样方式。
 
 ## 复现入口
 
@@ -71,5 +71,5 @@
 
 ## 备注 / 偏差说明
 
-- 客户截图是 47.6 ms/帧，本复现混合模型 13.8 ms（原生 9.0 ms），差异可能来自：客户 ONNX 输出结构/包含 one2many 分支、板子时钟/负载、其 demo 的后处理耗时、以及其 CPU usage 的采样窗口（若包含模型加载则会被拉高）。
+- 参考截图是 47.6 ms/帧，本复现混合模型 13.8 ms（原生 9.0 ms），差异可能来自：原 ONNX 输出结构/包含 one2many 分支、板子时钟/负载、其 demo 的后处理耗时、以及其 CPU usage 的采样窗口（若包含模型加载则会被拉高）。
 - 本复现未做端到端检测精度验收，只对量化精度分析结果和运行耗时负责；混合模型输出 cosine ≥ 0.9786（Pulsar2 Reference）。

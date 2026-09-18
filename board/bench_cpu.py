@@ -6,7 +6,7 @@
 - CPU 占用双口径：
     system  : /proc/stat 基准窗口前后差值（全部核，0–100%）
     process : /proc/self/stat utime+stime / wall（单核=100%）
-- 打印的 “Benchmark Results” 与客户提供的截图字段一致
+- 打印的 “Benchmark Results” 与参考截图的字段一致
 """
 
 from __future__ import annotations
