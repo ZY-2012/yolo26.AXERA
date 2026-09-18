@@ -71,7 +71,8 @@ bash host/run_all.sh
 把主机生成的 `models/` 和仓库里的 `board/` 放到板子同一父目录，登入板子一键运行：
 
 ```bash
-# 1. 主机上拷贝（板子 IP 换成实际地址）
+# 1. 主机上建目录并拷贝（板子 IP 换成实际地址；多源 scp 要求目标目录已存在）
+ssh root@<板子IP> "mkdir -p /root/yolo26_bench"
 scp -r models board root@<板子IP>:/root/yolo26_bench/
 
 # 2. 登入板子
