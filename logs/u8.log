@@ -1,0 +1,1063 @@
++---------------------+----------------------------+
+|     Model Name      |         OnnxModel          |
++---------------------+----------------------------+
+|     Model Info      | Op Set: 17 / IR Version: 8 |
++---------------------+----------------------------+
+|     IN: images      | float32: (1, 3, 640, 640)  |
+| OUT: output_split_0 |  float32: (1, 84, 80, 80)  |
+| OUT: output_split_1 |  float32: (1, 84, 40, 40)  |
+| OUT: output_split_2 |  float32: (1, 84, 20, 20)  |
++---------------------+----------------------------+
+|         Add         |             28             |
+|       Concat        |             22             |
+|      Constant       |             60             |
+|        Conv         |            102             |
+|         Div         |             8              |
+|       Gather        |             8              |
+|       MatMul        |             4              |
+|       MaxPool       |             3              |
+|         Mul         |            105             |
+|       Reshape       |             6              |
+|       Resize        |             2              |
+|        Shape        |             8              |
+|       Sigmoid       |             87             |
+|        Slice        |             16             |
+|       Softmax       |             2              |
+|        Split        |             3              |
+|      Transpose      |             4              |
++---------------------+----------------------------+
+|     Model Size      |          9.19 MB           |
++---------------------+----------------------------+
+2026-09-18 12:18:48.341 | WARNING  | axnn.yamain.command.build:fill_default:242 - force onnxsim due to found op_type in {'Constant', 'ConstantOfShape'}
+2026-09-18 12:18:48.342 | WARNING  | axnn.yamain.command.build:fill_default:395 - ignore images csc config because of src_format is AutoColorSpace or src_format and tensor_format are the same
+2026-09-18 12:18:48.342 | INFO     | axnn.yamain.common.util:extract_archive:149 - extract [../dataset/images100.tar] to [../build/u8/quant/dataset/images]...
+2026-09-18 12:18:48.438 | INFO     | axnn.frontend.parsers.onnx_parser:parse_onnx_model_proto:92 - onnxslim...
++---------------------+----------------------------+----------------------------+
+|     Model Name      |         OnnxModel          |         OnnxModel          |
++---------------------+----------------------------+----------------------------+
+|     Model Info      | Op Set: 17 / IR Version: 8 | Op Set: 17 / IR Version: 8 |
++---------------------+----------------------------+----------------------------+
+|     IN: images      | float32: (1, 3, 640, 640)  | float32: (1, 3, 640, 640)  |
+| OUT: output_split_0 |  float32: (1, 84, 80, 80)  |  float32: (1, 84, 80, 80)  |
+| OUT: output_split_1 |  float32: (1, 84, 40, 40)  |  float32: (1, 84, 40, 40)  |
+| OUT: output_split_2 |  float32: (1, 84, 20, 20)  |  float32: (1, 84, 20, 20)  |
++---------------------+----------------------------+----------------------------+
+|         Add         |             28             |             20             |
+|       Concat        |             22             |             22             |
+|      Constant       |             60             |             0              |
+|        Conv         |            102             |            102             |
+|         Div         |             8              |             0              |
+|       Gather        |             8              |             0              |
+|       MatMul        |             4              |             4              |
+|       MaxPool       |             3              |             3              |
+|         Mul         |            105             |             89             |
+|       Reshape       |             6              |             6              |
+|       Resize        |             2              |             2              |
+|        Shape        |             8              |             0              |
+|       Sigmoid       |             87             |             87             |
+|        Slice        |             16             |             16             |
+|       Softmax       |             2              |             2              |
+|        Split        |             3              |             3              |
+|      Transpose      |             4              |             4              |
++---------------------+----------------------------+----------------------------+
+|     Model Size      |          9.19 MB           |          9.19 MB           |
++---------------------+----------------------------+----------------------------+
+|    Elapsed Time     |                          1.09 s                         |
++---------------------+----------------------------+----------------------------+
+Building onnx ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:02
+2026-09-18 12:18:55.244 | INFO     | axnn.yamain.command.build:quant:862 - save optimized onnx to [../build/u8/frontend/optimized.onnx]
+                               Quant Config Table                               
+┏━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┓
+┃        ┃           ┃ Dataset   ┃ Data      ┃ Tensor   ┃           ┃          ┃
+┃ Input  ┃ Shape     ┃ Directory ┃ Format    ┃ Format   ┃ Mean      ┃ Std      ┃
+┡━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━┩
+│ images │ [1, 3,    │ ../build… │ Image     │ RGB      │ [0.0,     │ [255.0,  │
+│        │ 640, 640] │           │           │          │ 0.0, 0.0] │ 255.0,   │
+│        │           │           │           │          │           │ 255.0]   │
+└────────┴───────────┴───────────┴───────────┴──────────┴───────────┴──────────┘
+Quantization calibration will be executed on cpu
+Transformer optimize level: 0
+Statistics Inf tensor:   0%|          | 0/1 [00:00<?, ?it/s]Statistics Inf tensor: 100%|██████████| 1/1 [00:00<00:00,  2.07it/s]Statistics Inf tensor: 100%|██████████| 1/1 [00:00<00:00,  2.07it/s]
+[12:18:58] AX Set Float Op Table Pass Running ...         
+[12:18:58] AX Outlier Recode Pass Running ...             
+Get Outlier Progress:   0%|          | 0/100 [00:00<?, ?it/s]Get Outlier Progress:   1%|          | 1/100 [00:00<00:30,  3.24it/s]Get Outlier Progress:   2%|▏         | 2/100 [00:00<00:30,  3.20it/s]Get Outlier Progress:   3%|▎         | 3/100 [00:00<00:29,  3.24it/s]Get Outlier Progress:   4%|▍         | 4/100 [00:01<00:29,  3.25it/s]Get Outlier Progress:   5%|▌         | 5/100 [00:01<00:30,  3.12it/s]Get Outlier Progress:   6%|▌         | 6/100 [00:01<00:29,  3.17it/s]Get Outlier Progress:   7%|▋         | 7/100 [00:02<00:29,  3.17it/s]Get Outlier Progress:   8%|▊         | 8/100 [00:02<00:28,  3.20it/s]Get Outlier Progress:   9%|▉         | 9/100 [00:02<00:28,  3.21it/s]Get Outlier Progress:  10%|█         | 10/100 [00:03<00:28,  3.18it/s]Get Outlier Progress:  11%|█         | 11/100 [00:03<00:27,  3.18it/s]Get Outlier Progress:  12%|█▏        | 12/100 [00:03<00:27,  3.19it/s]Get Outlier Progress:  13%|█▎        | 13/100 [00:04<00:27,  3.22it/s]Get Outlier Progress:  14%|█▍        | 14/100 [00:04<00:26,  3.25it/s]Get Outlier Progress:  15%|█▌        | 15/100 [00:04<00:26,  3.23it/s]Get Outlier Progress:  16%|█▌        | 16/100 [00:04<00:25,  3.26it/s]Get Outlier Progress:  17%|█▋        | 17/100 [00:05<00:25,  3.27it/s]Get Outlier Progress:  18%|█▊        | 18/100 [00:05<00:24,  3.30it/s]Get Outlier Progress:  19%|█▉        | 19/100 [00:05<00:24,  3.28it/s]Get Outlier Progress:  20%|██        | 20/100 [00:06<00:24,  3.25it/s]Get Outlier Progress:  21%|██        | 21/100 [00:06<00:24,  3.19it/s]Get Outlier Progress:  22%|██▏       | 22/100 [00:06<00:24,  3.20it/s]Get Outlier Progress:  23%|██▎       | 23/100 [00:07<00:23,  3.22it/s]Get Outlier Progress:  24%|██▍       | 24/100 [00:07<00:24,  3.14it/s]Get Outlier Progress:  25%|██▌       | 25/100 [00:07<00:24,  3.12it/s]Get Outlier Progress:  26%|██▌       | 26/100 [00:08<00:23,  3.17it/s]Get Outlier Progress:  27%|██▋       | 27/100 [00:08<00:22,  3.19it/s]Get Outlier Progress:  28%|██▊       | 28/100 [00:08<00:22,  3.23it/s]Get Outlier Progress:  29%|██▉       | 29/100 [00:09<00:21,  3.25it/s]Get Outlier Progress:  30%|███       | 30/100 [00:09<00:21,  3.25it/s]Get Outlier Progress:  31%|███       | 31/100 [00:09<00:21,  3.22it/s]Get Outlier Progress:  32%|███▏      | 32/100 [00:09<00:20,  3.24it/s]Get Outlier Progress:  33%|███▎      | 33/100 [00:10<00:20,  3.25it/s]Get Outlier Progress:  34%|███▍      | 34/100 [00:10<00:20,  3.26it/s]Get Outlier Progress:  35%|███▌      | 35/100 [00:10<00:19,  3.27it/s]Get Outlier Progress:  36%|███▌      | 36/100 [00:11<00:19,  3.29it/s]Get Outlier Progress:  37%|███▋      | 37/100 [00:11<00:19,  3.30it/s]Get Outlier Progress:  38%|███▊      | 38/100 [00:11<00:18,  3.31it/s]Get Outlier Progress:  39%|███▉      | 39/100 [00:12<00:18,  3.32it/s]Get Outlier Progress:  40%|████      | 40/100 [00:12<00:18,  3.32it/s]Get Outlier Progress:  41%|████      | 41/100 [00:12<00:17,  3.32it/s]Get Outlier Progress:  42%|████▏     | 42/100 [00:12<00:17,  3.32it/s]Get Outlier Progress:  43%|████▎     | 43/100 [00:13<00:17,  3.31it/s]Get Outlier Progress:  44%|████▍     | 44/100 [00:13<00:17,  3.20it/s]Get Outlier Progress:  45%|████▌     | 45/100 [00:13<00:17,  3.19it/s]Get Outlier Progress:  46%|████▌     | 46/100 [00:14<00:16,  3.24it/s]Get Outlier Progress:  47%|████▋     | 47/100 [00:14<00:16,  3.27it/s]Get Outlier Progress:  48%|████▊     | 48/100 [00:14<00:15,  3.28it/s]Get Outlier Progress:  49%|████▉     | 49/100 [00:15<00:15,  3.28it/s]Get Outlier Progress:  50%|█████     | 50/100 [00:15<00:15,  3.27it/s]Get Outlier Progress:  51%|█████     | 51/100 [00:15<00:14,  3.29it/s]Get Outlier Progress:  52%|█████▏    | 52/100 [00:16<00:14,  3.29it/s]Get Outlier Progress:  53%|█████▎    | 53/100 [00:16<00:14,  3.29it/s]Get Outlier Progress:  54%|█████▍    | 54/100 [00:16<00:14,  3.27it/s]Get Outlier Progress:  55%|█████▌    | 55/100 [00:16<00:13,  3.30it/s]Get Outlier Progress:  56%|█████▌    | 56/100 [00:17<00:13,  3.33it/s]Get Outlier Progress:  57%|█████▋    | 57/100 [00:17<00:12,  3.34it/s]Get Outlier Progress:  58%|█████▊    | 58/100 [00:17<00:12,  3.33it/s]Get Outlier Progress:  59%|█████▉    | 59/100 [00:18<00:12,  3.32it/s]Get Outlier Progress:  60%|██████    | 60/100 [00:18<00:12,  3.31it/s]Get Outlier Progress:  61%|██████    | 61/100 [00:18<00:11,  3.27it/s]Get Outlier Progress:  62%|██████▏   | 62/100 [00:19<00:11,  3.22it/s]Get Outlier Progress:  63%|██████▎   | 63/100 [00:19<00:11,  3.23it/s]Get Outlier Progress:  64%|██████▍   | 64/100 [00:19<00:11,  3.21it/s]Get Outlier Progress:  65%|██████▌   | 65/100 [00:20<00:10,  3.23it/s]Get Outlier Progress:  66%|██████▌   | 66/100 [00:20<00:10,  3.14it/s]Get Outlier Progress:  67%|██████▋   | 67/100 [00:20<00:10,  3.18it/s]Get Outlier Progress:  68%|██████▊   | 68/100 [00:20<00:09,  3.23it/s]Get Outlier Progress:  69%|██████▉   | 69/100 [00:21<00:09,  3.27it/s]Get Outlier Progress:  70%|███████   | 70/100 [00:21<00:09,  3.24it/s]Get Outlier Progress:  71%|███████   | 71/100 [00:21<00:08,  3.23it/s]Get Outlier Progress:  72%|███████▏  | 72/100 [00:22<00:08,  3.20it/s]Get Outlier Progress:  73%|███████▎  | 73/100 [00:22<00:08,  3.22it/s]Get Outlier Progress:  74%|███████▍  | 74/100 [00:22<00:07,  3.26it/s]Get Outlier Progress:  75%|███████▌  | 75/100 [00:23<00:07,  3.24it/s]Get Outlier Progress:  76%|███████▌  | 76/100 [00:23<00:07,  3.24it/s]Get Outlier Progress:  77%|███████▋  | 77/100 [00:23<00:07,  3.27it/s]Get Outlier Progress:  78%|███████▊  | 78/100 [00:24<00:06,  3.30it/s]Get Outlier Progress:  79%|███████▉  | 79/100 [00:24<00:06,  3.28it/s]Get Outlier Progress:  80%|████████  | 80/100 [00:24<00:06,  3.27it/s]Get Outlier Progress:  81%|████████  | 81/100 [00:24<00:05,  3.28it/s]Get Outlier Progress:  82%|████████▏ | 82/100 [00:25<00:05,  3.14it/s]Get Outlier Progress:  83%|████████▎ | 83/100 [00:25<00:05,  3.15it/s]Get Outlier Progress:  84%|████████▍ | 84/100 [00:25<00:05,  3.17it/s]Get Outlier Progress:  85%|████████▌ | 85/100 [00:26<00:04,  3.19it/s]Get Outlier Progress:  86%|████████▌ | 86/100 [00:26<00:04,  3.17it/s]Get Outlier Progress:  87%|████████▋ | 87/100 [00:26<00:04,  3.22it/s]Get Outlier Progress:  88%|████████▊ | 88/100 [00:27<00:03,  3.24it/s]Get Outlier Progress:  89%|████████▉ | 89/100 [00:27<00:03,  3.25it/s]Get Outlier Progress:  90%|█████████ | 90/100 [00:27<00:03,  3.20it/s]Get Outlier Progress:  91%|█████████ | 91/100 [00:28<00:02,  3.24it/s]Get Outlier Progress:  92%|█████████▏| 92/100 [00:28<00:02,  3.25it/s]Get Outlier Progress:  93%|█████████▎| 93/100 [00:28<00:02,  3.28it/s]Get Outlier Progress:  94%|█████████▍| 94/100 [00:28<00:01,  3.28it/s]Get Outlier Progress:  95%|█████████▌| 95/100 [00:29<00:01,  3.28it/s]Get Outlier Progress:  96%|█████████▌| 96/100 [00:29<00:01,  3.29it/s]Get Outlier Progress:  97%|█████████▋| 97/100 [00:29<00:00,  3.33it/s]Get Outlier Progress:  98%|█████████▊| 98/100 [00:30<00:00,  3.32it/s]Get Outlier Progress:  99%|█████████▉| 99/100 [00:30<00:00,  3.30it/s]Get Outlier Progress: 100%|██████████| 100/100 [00:30<00:00,  3.33it/s]Get Outlier Progress: 100%|██████████| 100/100 [00:30<00:00,  3.25it/s]
+
+
+    Ratio of outliers in tensor【 level=Log(Max_Pertensor/Max_Perchannel) 】    
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━┓
+┃            ┃ Sparse     ┃            ┃            ┃            ┃             ┃
+┃            ┃ channel    ┃ level>=3   ┃ level>=4   ┃ level>=5   ┃ level>=6    ┃
+┃ Op outputs ┃ ratio      ┃ ratio      ┃ ratio      ┃ ratio      ┃ ratio       ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━┩
+│ /model.2/… │ 0.0        │ 0.0625     │ 0.0        │ 0.0        │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.16… │ 0.0        │ 0.75       │ 0.203125   │ 0.0        │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.23… │ 0.0        │ 0.125      │ 0.0125000… │ 0.0        │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.23… │ 0.0        │ 0.6499999… │ 0.0        │ 0.0        │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.23… │ 0.0        │ 0.0625     │ 0.0        │ 0.0        │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.19… │ 0.0        │ 0.34375    │ 0.0        │ 0.0        │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.23… │ 0.0        │ 0.1124999… │ 0.0250000… │ 0.0125000… │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.23… │ 0.0        │ 0.7624999… │ 0.1000000… │ 0.0        │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.23… │ 0.0        │ 0.9250000… │ 0.8500000… │ 0.0125000… │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.22… │ 0.0        │ 0.16015625 │ 0.046875   │ 0.0        │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.22… │ 0.0        │ 0.546875   │ 0.0859375  │ 0.01171875 │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.23… │ 0.0        │ 0.19140625 │ 0.02734375 │ 0.0        │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.23… │ 0.0        │ 0.875      │ 0.6499999… │ 0.0        │ 0.0         │
+├────────────┼────────────┼────────────┼────────────┼────────────┼─────────────┤
+│ /model.23… │ 0.0        │ 0.9125000… │ 0.2750000… │ 0.0        │ 0.0         │
+└────────────┴────────────┴────────────┴────────────┴────────────┴─────────────┘
+[12:19:29] AX Set MixPrecision Pass Running ...           
+[12:19:29] AX Set LN Quant dtype Quant Pass Running ...   
+[12:19:29] AX Refine Operation Config Pass Running ...    
+[12:19:29] AX Tanh Operation Format Pass Running ...      
+[12:19:29] AX Confused Op Refine Pass Running ...         
+[12:19:30] AX Quantization Fusion Pass Running ...        
+[12:19:30] AX Quantization Simplify Pass Running ...      
+[12:19:30] AX Parameter Quantization Pass Running ...     
+[12:19:31] AX Runtime Calibration Pass Running ...        
+Calibration Progress(Phase 1):   0%|          | 0/100 [00:00<?, ?it/s]Calibration Progress(Phase 1):   1%|          | 1/100 [00:00<00:56,  1.74it/s]Calibration Progress(Phase 1):   2%|▏         | 2/100 [00:01<00:56,  1.75it/s]Calibration Progress(Phase 1):   3%|▎         | 3/100 [00:01<00:56,  1.73it/s]Calibration Progress(Phase 1):   4%|▍         | 4/100 [00:02<00:55,  1.73it/s]Calibration Progress(Phase 1):   5%|▌         | 5/100 [00:02<00:54,  1.73it/s]Calibration Progress(Phase 1):   6%|▌         | 6/100 [00:03<00:54,  1.73it/s]Calibration Progress(Phase 1):   7%|▋         | 7/100 [00:04<00:53,  1.73it/s]Calibration Progress(Phase 1):   8%|▊         | 8/100 [00:04<00:52,  1.74it/s]Calibration Progress(Phase 1):   9%|▉         | 9/100 [00:05<00:52,  1.74it/s]Calibration Progress(Phase 1):  10%|█         | 10/100 [00:05<00:51,  1.73it/s]Calibration Progress(Phase 1):  11%|█         | 11/100 [00:06<00:51,  1.73it/s]Calibration Progress(Phase 1):  12%|█▏        | 12/100 [00:06<00:51,  1.70it/s]Calibration Progress(Phase 1):  13%|█▎        | 13/100 [00:07<00:51,  1.70it/s]Calibration Progress(Phase 1):  14%|█▍        | 14/100 [00:08<00:50,  1.71it/s]Calibration Progress(Phase 1):  15%|█▌        | 15/100 [00:08<00:50,  1.67it/s]Calibration Progress(Phase 1):  16%|█▌        | 16/100 [00:09<00:50,  1.68it/s]Calibration Progress(Phase 1):  17%|█▋        | 17/100 [00:09<00:49,  1.68it/s]Calibration Progress(Phase 1):  18%|█▊        | 18/100 [00:10<00:49,  1.67it/s]Calibration Progress(Phase 1):  19%|█▉        | 19/100 [00:11<00:48,  1.68it/s]Calibration Progress(Phase 1):  20%|██        | 20/100 [00:11<00:47,  1.70it/s]Calibration Progress(Phase 1):  21%|██        | 21/100 [00:12<00:46,  1.70it/s]Calibration Progress(Phase 1):  22%|██▏       | 22/100 [00:12<00:46,  1.69it/s]Calibration Progress(Phase 1):  23%|██▎       | 23/100 [00:13<00:45,  1.68it/s]Calibration Progress(Phase 1):  24%|██▍       | 24/100 [00:14<00:46,  1.65it/s]Calibration Progress(Phase 1):  25%|██▌       | 25/100 [00:14<00:44,  1.68it/s]Calibration Progress(Phase 1):  26%|██▌       | 26/100 [00:15<00:44,  1.67it/s]Calibration Progress(Phase 1):  27%|██▋       | 27/100 [00:15<00:44,  1.65it/s]Calibration Progress(Phase 1):  28%|██▊       | 28/100 [00:16<00:43,  1.65it/s]Calibration Progress(Phase 1):  29%|██▉       | 29/100 [00:17<00:42,  1.65it/s]Calibration Progress(Phase 1):  30%|███       | 30/100 [00:17<00:42,  1.67it/s]Calibration Progress(Phase 1):  31%|███       | 31/100 [00:18<00:41,  1.67it/s]Calibration Progress(Phase 1):  32%|███▏      | 32/100 [00:18<00:40,  1.68it/s]Calibration Progress(Phase 1):  33%|███▎      | 33/100 [00:19<00:40,  1.66it/s]Calibration Progress(Phase 1):  34%|███▍      | 34/100 [00:20<00:39,  1.67it/s]Calibration Progress(Phase 1):  35%|███▌      | 35/100 [00:20<00:39,  1.67it/s]Calibration Progress(Phase 1):  36%|███▌      | 36/100 [00:21<00:38,  1.66it/s]Calibration Progress(Phase 1):  37%|███▋      | 37/100 [00:21<00:38,  1.66it/s]Calibration Progress(Phase 1):  38%|███▊      | 38/100 [00:22<00:37,  1.64it/s]Calibration Progress(Phase 1):  39%|███▉      | 39/100 [00:23<00:37,  1.63it/s]Calibration Progress(Phase 1):  40%|████      | 40/100 [00:23<00:36,  1.65it/s]Calibration Progress(Phase 1):  41%|████      | 41/100 [00:24<00:35,  1.68it/s]Calibration Progress(Phase 1):  42%|████▏     | 42/100 [00:24<00:34,  1.70it/s]Calibration Progress(Phase 1):  43%|████▎     | 43/100 [00:25<00:33,  1.71it/s]Calibration Progress(Phase 1):  44%|████▍     | 44/100 [00:26<00:33,  1.70it/s]Calibration Progress(Phase 1):  45%|████▌     | 45/100 [00:26<00:32,  1.71it/s]Calibration Progress(Phase 1):  46%|████▌     | 46/100 [00:27<00:31,  1.69it/s]Calibration Progress(Phase 1):  47%|████▋     | 47/100 [00:27<00:31,  1.68it/s]Calibration Progress(Phase 1):  48%|████▊     | 48/100 [00:28<00:31,  1.67it/s]Calibration Progress(Phase 1):  49%|████▉     | 49/100 [00:29<00:30,  1.67it/s]Calibration Progress(Phase 1):  50%|█████     | 50/100 [00:29<00:29,  1.69it/s]Calibration Progress(Phase 1):  51%|█████     | 51/100 [00:30<00:28,  1.71it/s]Calibration Progress(Phase 1):  52%|█████▏    | 52/100 [00:30<00:28,  1.71it/s]Calibration Progress(Phase 1):  53%|█████▎    | 53/100 [00:31<00:27,  1.68it/s]Calibration Progress(Phase 1):  54%|█████▍    | 54/100 [00:32<00:27,  1.67it/s]Calibration Progress(Phase 1):  55%|█████▌    | 55/100 [00:32<00:26,  1.68it/s]Calibration Progress(Phase 1):  56%|█████▌    | 56/100 [00:33<00:26,  1.67it/s]Calibration Progress(Phase 1):  57%|█████▋    | 57/100 [00:33<00:25,  1.67it/s]Calibration Progress(Phase 1):  58%|█████▊    | 58/100 [00:34<00:25,  1.68it/s]Calibration Progress(Phase 1):  59%|█████▉    | 59/100 [00:34<00:24,  1.69it/s]Calibration Progress(Phase 1):  60%|██████    | 60/100 [00:35<00:24,  1.65it/s]Calibration Progress(Phase 1):  61%|██████    | 61/100 [00:36<00:23,  1.67it/s]Calibration Progress(Phase 1):  62%|██████▏   | 62/100 [00:36<00:22,  1.67it/s]Calibration Progress(Phase 1):  63%|██████▎   | 63/100 [00:37<00:22,  1.66it/s]Calibration Progress(Phase 1):  64%|██████▍   | 64/100 [00:38<00:21,  1.66it/s]Calibration Progress(Phase 1):  65%|██████▌   | 65/100 [00:38<00:21,  1.66it/s]Calibration Progress(Phase 1):  66%|██████▌   | 66/100 [00:39<00:20,  1.67it/s]Calibration Progress(Phase 1):  67%|██████▋   | 67/100 [00:39<00:19,  1.68it/s]Calibration Progress(Phase 1):  68%|██████▊   | 68/100 [00:40<00:18,  1.69it/s]Calibration Progress(Phase 1):  69%|██████▉   | 69/100 [00:40<00:18,  1.68it/s]Calibration Progress(Phase 1):  70%|███████   | 70/100 [00:41<00:18,  1.61it/s]Calibration Progress(Phase 1):  71%|███████   | 71/100 [00:42<00:18,  1.56it/s]Calibration Progress(Phase 1):  72%|███████▏  | 72/100 [00:42<00:17,  1.60it/s]Calibration Progress(Phase 1):  73%|███████▎  | 73/100 [00:43<00:16,  1.63it/s]Calibration Progress(Phase 1):  74%|███████▍  | 74/100 [00:44<00:15,  1.63it/s]Calibration Progress(Phase 1):  75%|███████▌  | 75/100 [00:44<00:16,  1.56it/s]Calibration Progress(Phase 1):  76%|███████▌  | 76/100 [00:45<00:16,  1.49it/s]Calibration Progress(Phase 1):  77%|███████▋  | 77/100 [00:46<00:15,  1.48it/s]Calibration Progress(Phase 1):  78%|███████▊  | 78/100 [00:46<00:14,  1.48it/s]Calibration Progress(Phase 1):  79%|███████▉  | 79/100 [00:47<00:13,  1.52it/s]Calibration Progress(Phase 1):  80%|████████  | 80/100 [00:48<00:13,  1.54it/s]Calibration Progress(Phase 1):  81%|████████  | 81/100 [00:48<00:12,  1.56it/s]Calibration Progress(Phase 1):  82%|████████▏ | 82/100 [00:49<00:11,  1.57it/s]Calibration Progress(Phase 1):  83%|████████▎ | 83/100 [00:50<00:10,  1.59it/s]Calibration Progress(Phase 1):  84%|████████▍ | 84/100 [00:50<00:09,  1.61it/s]Calibration Progress(Phase 1):  85%|████████▌ | 85/100 [00:51<00:09,  1.63it/s]Calibration Progress(Phase 1):  86%|████████▌ | 86/100 [00:51<00:08,  1.65it/s]Calibration Progress(Phase 1):  87%|████████▋ | 87/100 [00:52<00:07,  1.64it/s]Calibration Progress(Phase 1):  88%|████████▊ | 88/100 [00:53<00:07,  1.65it/s]Calibration Progress(Phase 1):  89%|████████▉ | 89/100 [00:53<00:06,  1.63it/s]Calibration Progress(Phase 1):  90%|█████████ | 90/100 [00:54<00:06,  1.66it/s]Calibration Progress(Phase 1):  91%|█████████ | 91/100 [00:54<00:05,  1.67it/s]Calibration Progress(Phase 1):  92%|█████████▏| 92/100 [00:55<00:04,  1.68it/s]Calibration Progress(Phase 1):  93%|█████████▎| 93/100 [00:56<00:04,  1.68it/s]Calibration Progress(Phase 1):  94%|█████████▍| 94/100 [00:56<00:03,  1.68it/s]Calibration Progress(Phase 1):  95%|█████████▌| 95/100 [00:57<00:02,  1.67it/s]Calibration Progress(Phase 1):  96%|█████████▌| 96/100 [00:57<00:02,  1.68it/s]Calibration Progress(Phase 1):  97%|█████████▋| 97/100 [00:58<00:01,  1.67it/s]Calibration Progress(Phase 1):  98%|█████████▊| 98/100 [00:59<00:01,  1.66it/s]Calibration Progress(Phase 1):  99%|█████████▉| 99/100 [00:59<00:00,  1.67it/s]Calibration Progress(Phase 1): 100%|██████████| 100/100 [01:00<00:00,  1.66it/s]Calibration Progress(Phase 1): 100%|██████████| 100/100 [01:00<00:00,  1.66it/s]
+[12:20:32] AX Quantization Alignment Pass Running ...     
+[12:20:32] AX Refine Int Parameter Pass Running ...       
+[12:20:32] AX Refine Scale Pass Running ...               
+[12:20:32] AX Passive Parameter Quantization Running ...  
+[12:20:32] AX Parameter Baking Pass Running ...           
+--------- Network Snapshot ---------
+Num of Op:                    [273]
+Num of Quantized Op:          [273]
+Num of Variable:              [546]
+Num of Quantized Var:         [546]
+------- Quantization Snapshot ------
+Num of Quant Config:          [874]
+BAKED:                        [104]
+OVERLAPPED:                   [363]
+SLAVE:                        [17]
+ACTIVATED:                    [227]
+SOI:                          [61]
+PASSIVE_BAKED:                [102]
+Network Quantization Finished.
+[Warning]File ../build/u8/quant/quant_axmodel.onnx has already exist, quant exporter will overwrite it.
+[Warning]File ../build/u8/quant/quant_axmodel.json has already exist, quant exporter will overwrite it.
+Do quant optimization
+quant.axmodel export success: 
+	/workspace/build/u8/quant/quant_axmodel.onnx
+	/workspace/build/u8/quant/quant_axmodel.data
+===>export debug_data to folder: ../build/u8/quant/debug/numpy/float
+===>export io data to folder: ../build/u8/quant/debug/io
+Building native ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
+                  Quant Precision Table【EndToEnd Reference】                   
+┏━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
+┃         ┃          ┃ Output  ┃          ┃       ┃        ┃         ┃         ┃
+┃ Operat… ┃   Type   ┃ Tensor  ┃  Shape   ┃ DType ┃ QDType ┃ Cosin   ┃ MSE     ┃
+┡━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━┩
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99964 │ 0.04295 │
+│         │          │         │   320,   │       │        │         │         │
+│         │          │         │   320)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_1:o… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99941 │ 0.02813 │
+│         │          │         │   320,   │       │        │         │         │
+│         │          │         │   320)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99566 │ 0.28852 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_2:o… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99519 │ 0.20945 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99046 │ 0.41235 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_34:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98844 │ 0.25452 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98784 │ 0.33974 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98950 │ 0.16931 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 8,  │ FP32  │   U8   │ 0.99066 │ 0.00617 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_36:… │ AxQuant… │ /model… │  (1, 8,  │ FP32  │   U8   │ 0.98863 │ 0.00139 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.97566 │ 0.89850 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_37:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98015 │ 0.43514 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98752 │ 0.63641 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 48,  │ FP32  │   U8   │ 0.98795 │ 0.38182 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98463 │ 0.37404 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_35:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.97531 │ 0.13648 │
+│         │          │         │   160,   │       │        │         │         │
+│         │          │         │   160)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98003 │ 0.08495 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_62:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98866 │ 0.02632 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98550 │ 0.04615 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_63:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98756 │ 0.01901 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98691 │ 0.02223 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98840 │ 0.01580 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98967 │ 0.03732 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_65:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99178 │ 0.01939 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98820 │ 0.06390 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_66:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98901 │ 0.04308 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99245 │ 0.05744 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 96,  │ FP32  │   U8   │ 0.99103 │ 0.03182 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97728 │ 0.07978 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_64:… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.96736 │ 0.00752 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98726 │ 0.04473 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_67:… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.99054 │ 0.01278 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98010 │ 0.05153 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_68:… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98169 │ 0.01656 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98115 │ 0.01968 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98242 │ 0.01345 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98638 │ 0.01494 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.97398 │ 0.10938 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_70:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98889 │ 0.00507 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_71:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.97112 │ 0.03543 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98389 │ 0.04551 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_73:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.97659 │ 0.00919 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98738 │ 0.02426 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_74:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98554 │ 0.00786 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98985 │ 0.01206 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98947 │ 0.03480 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_75:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98356 │ 0.00657 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99401 │ 0.05486 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_76:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99461 │ 0.03926 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99534 │ 0.05324 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99300 │ 0.04433 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98556 │ 0.06070 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_72:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98211 │ 0.01820 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 192, │ FP32  │   U8   │ 0.98184 │ 0.01711 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98295 │ 0.04491 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_69:… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97791 │ 0.00775 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98615 │ 0.04525 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_77:… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98421 │ 0.01142 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98281 │ 0.07082 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_78:… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.97772 │ 0.01705 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97896 │ 0.02264 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97483 │ 0.01146 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98817 │ 0.01841 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.97335 │ 0.11691 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_80:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98563 │ 0.00306 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_81:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.96967 │ 0.04564 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98727 │ 0.04289 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_83:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98210 │ 0.00968 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99130 │ 0.03873 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_84:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98999 │ 0.01500 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98955 │ 0.01813 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99045 │ 0.03296 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_85:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98943 │ 0.00969 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99349 │ 0.06749 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_86:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99412 │ 0.04459 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99467 │ 0.06614 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 128, │ FP32  │   U8   │ 0.99195 │ 0.05589 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98871 │ 0.04787 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_82:… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98567 │ 0.01166 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 384, │ FP32  │   U8   │ 0.98043 │ 0.01525 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98783 │ 0.05118 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_79:… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98742 │ 0.01056 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97646 │ 0.06335 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxMaxPo… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.99173 │ 0.05791 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxMaxPo… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.99485 │ 0.05569 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxMaxPo… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.99597 │ 0.05403 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 512, │ FP32  │   U8   │ 0.99319 │ 0.05775 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98899 │ 0.06448 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_87:… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.97287 │ 0.00762 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98400 │ 0.01883 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.97917 │ 0.09676 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_3:o… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98026 │ 0.03547 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSplit  │ /model… │ (1, 128, │ FP32  │   U8   │ 0.96787 │ 0.04134 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSplit  │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98717 │ 0.02960 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.97357 │ 0.10392 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxResha… │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.97357 │ 0.10392 │
+│         │          │         │   128,   │       │        │         │         │
+│         │          │         │   400)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSplit  │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.98547 │ 0.04600 │
+│         │          │         │ 32, 400) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSplit  │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.98477 │ 0.03972 │
+│         │          │         │ 32, 400) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSplit  │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.96686 │ 0.16497 │
+│         │          │         │ 64, 400) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 2,  │ FP32  │   S8   │ 0.98539 │ 0.00144 │
+│         │          │         │ 32, 400) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxResha… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.96686 │ 0.16497 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxTrans… │ /model… │  (1, 2,  │ FP32  │   S8   │ 0.98539 │ 0.00144 │
+│         │          │         │ 400, 32) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97034 │ 0.04233 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.99231 │ 0.20477 │
+│         │          │         │   400,   │       │        │         │         │
+│         │          │         │   400)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 2,  │ FP32  │   S8   │ 0.94586 │ 0.00001 │
+│         │          │         │   400,   │       │        │         │         │
+│         │          │         │   400)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxTrans… │ /model… │  (1, 2,  │ FP32  │   S8   │ 0.94586 │ 0.00001 │
+│         │          │         │   400,   │       │        │         │         │
+│         │          │         │   400)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.97665 │ 0.05998 │
+│         │          │         │ 64, 400) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxResha… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97665 │ 0.05998 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.93478 │ 0.06867 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.92465 │ 0.08815 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97245 │ 0.09152 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98869 │ 0.07000 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_5:o… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.97220 │ 0.00312 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.86884 │ 0.09160 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.95362 │ 0.18430 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 256, │ FP32  │   U8   │ 0.95679 │ 0.11282 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98133 │ 0.12888 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_4:o… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.96598 │ 0.01078 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxResize │ /model… │ (1, 256, │ FP32  │   U8   │ 0.96599 │ 0.01078 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 384, │ FP32  │   U8   │ 0.96975 │ 0.00981 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98161 │ 0.06019 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_6:o… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98297 │ 0.01792 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98100 │ 0.02544 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98646 │ 0.01041 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98673 │ 0.01272 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.97632 │ 0.09782 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_8:o… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98742 │ 0.00312 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_9:o… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.96153 │ 0.02299 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98518 │ 0.03611 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_11:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.97186 │ 0.00751 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98607 │ 0.04363 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_12:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98830 │ 0.01572 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98846 │ 0.01876 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98482 │ 0.02783 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_13:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.97934 │ 0.00569 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99384 │ 0.07554 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_14:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99362 │ 0.06548 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99482 │ 0.08486 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99365 │ 0.05393 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98105 │ 0.04658 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_10:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.97545 │ 0.01266 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 192, │ FP32  │   U8   │ 0.98147 │ 0.01617 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98443 │ 0.03701 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_7:o… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97913 │ 0.00736 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxResize │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97911 │ 0.00736 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.97441 │ 0.00746 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99166 │ 0.02591 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_15:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99279 │ 0.01256 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99244 │ 0.01931 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99371 │ 0.00582 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99301 │ 0.00278 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99302 │ 0.04779 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_17:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99529 │ 0.00063 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_18:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99392 │ 0.01402 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98350 │ 0.04435 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_20:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98210 │ 0.01390 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98806 │ 0.04165 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_21:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99001 │ 0.00861 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99006 │ 0.00949 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99200 │ 0.01913 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_22:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99578 │ 0.00421 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99545 │ 0.10793 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_23:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99602 │ 0.08796 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99630 │ 0.10290 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99610 │ 0.05846 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98849 │ 0.07035 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_19:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98909 │ 0.03438 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 96,  │ FP32  │   U8   │ 0.99095 │ 0.01984 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98672 │ 0.05790 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_16:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99231 │ 0.00991 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98775 │ 0.04354 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99131 │ 0.39438 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99749 │ 0.04357 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_24:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98324 │ 0.00736 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_44:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99403 │ 0.23761 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_50:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99697 │ 0.04825 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 192, │ FP32  │   U8   │ 0.98069 │ 0.00737 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.97896 │ 0.09781 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.98540 │ 0.04192 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98080 │ 0.05586 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_45:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98312 │ 0.04238 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_51:… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.98190 │ 0.01878 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_25:… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97895 │ 0.01699 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 4,  │ FP32  │   U8   │ 0.99249 │ 0.20314 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.98896 │ 0.07083 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.97353 │ 0.02425 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98607 │ 0.00974 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_52:… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.98939 │ 0.04876 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99465 │ 0.00416 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98796 │ 0.04367 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.96552 │ 0.39314 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_27:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99550 │ 0.00068 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_28:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98551 │ 0.01399 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_53:… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.97363 │ 0.21476 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98680 │ 0.02627 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.99915 │ 0.74308 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_30:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98012 │ 0.00567 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99025 │ 0.03023 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ output… │ AxDequa… │ output… │ (1, 84,  │ FP32  │  FP32  │ 0.99914 │ 0.71737 │
+│         │          │         │ 80, 80)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_31:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98983 │ 0.00646 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99213 │ 0.00732 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98964 │ 0.03036 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_32:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.98611 │ 0.00746 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99199 │ 0.17837 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_33:… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99320 │ 0.09496 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 32,  │ FP32  │   U8   │ 0.99394 │ 0.10995 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.99351 │ 0.06197 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98672 │ 0.10569 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_29:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98596 │ 0.04367 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 192, │ FP32  │   U8   │ 0.98353 │ 0.02589 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98433 │ 0.06848 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_26:… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98840 │ 0.01020 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98690 │ 0.05233 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99331 │ 0.14598 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.99504 │ 0.04915 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_38:… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97947 │ 0.01133 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_46:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.99447 │ 0.10861 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_54:… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.99484 │ 0.04386 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 384, │ FP32  │   U8   │ 0.97184 │ 0.01100 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98717 │ 0.08288 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.97871 │ 0.10820 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.96808 │ 0.13872 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_47:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98883 │ 0.04894 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_55:… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.97500 │ 0.02882 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_39:… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.95573 │ 0.03954 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 4,  │ FP32  │   U8   │ 0.99460 │ 0.26322 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.98040 │ 0.11223 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 128, │ FP32  │   U8   │ 0.94987 │ 0.07602 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSlice  │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98867 │ 0.00305 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_56:… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.98166 │ 0.07032 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98787 │ 0.05580 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.93445 │ 1.29264 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_41:… │ AxQuant… │ /model… │ (1, 64,  │ FP32  │   U8   │ 0.98872 │ 0.01300 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_57:… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.94127 │ 0.92864 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98758 │ 0.08072 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.99076 │ 7.78677 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_42:… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98718 │ 0.02528 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.98641 │ 0.02915 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ output… │ AxDequa… │ output… │ (1, 84,  │ FP32  │  FP32  │ 0.99077 │ 7.42850 │
+│         │          │         │ 40, 40)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98256 │ 0.07037 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxResha… │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.98256 │ 0.07037 │
+│         │          │         │   128,   │       │        │         │         │
+│         │          │         │   400)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSplit  │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.98607 │ 0.07080 │
+│         │          │         │ 32, 400) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSplit  │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.98375 │ 0.08721 │
+│         │          │         │ 32, 400) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxSplit  │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.97844 │ 0.06173 │
+│         │          │         │ 64, 400) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 2,  │ FP32  │   S8   │ 0.98603 │ 0.00222 │
+│         │          │         │ 32, 400) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxResha… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97844 │ 0.06173 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxTrans… │ /model… │  (1, 2,  │ FP32  │   S8   │ 0.98603 │ 0.00222 │
+│         │          │         │ 400, 32) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97051 │ 0.07366 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.98351 │ 0.75926 │
+│         │          │         │   400,   │       │        │         │         │
+│         │          │         │   400)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 2,  │ FP32  │   S8   │ 0.95599 │ 0.00002 │
+│         │          │         │   400,   │       │        │         │         │
+│         │          │         │   400)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxTrans… │ /model… │  (1, 2,  │ FP32  │   S8   │ 0.95599 │ 0.00002 │
+│         │          │         │   400,   │       │        │         │         │
+│         │          │         │   400)   │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 2,  │ FP32  │   U8   │ 0.97884 │ 0.03890 │
+│         │          │         │ 64, 400) │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxResha… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97884 │ 0.03890 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.96334 │ 0.09247 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.96151 │ 0.05530 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.97685 │ 0.08067 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.98347 │ 0.16023 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_43:… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.95884 │ 0.03303 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.94749 │ 0.09379 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 128, │ FP32  │   U8   │ 0.96715 │ 0.13378 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxConcat │ /model… │ (1, 384, │ FP32  │   U8   │ 0.96357 │ 0.07095 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.97448 │ 0.18703 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_40:… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.96795 │ 0.05868 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98171 │ 0.24661 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.96841 │ 0.10211 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_48:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.98945 │ 0.10630 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_58:… │ AxQuant… │ /model… │ (1, 256, │ FP32  │   U8   │ 0.96495 │ 0.06183 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.97500 │ 0.20827 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.96014 │ 0.15410 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_49:… │ AxQuant… │ /model… │ (1, 16,  │ FP32  │   U8   │ 0.97551 │ 0.16802 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_59:… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.95606 │ 0.06665 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │  (1, 4,  │ FP32  │   U8   │ 0.99107 │ 0.64084 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.93716 │ 0.58819 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_60:… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.93803 │ 0.32236 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.88878 │ 2.43207 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ op_61:… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.89668 │ 1.76525 │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ /model… │ AxQuant… │ /model… │ (1, 80,  │ FP32  │   U8   │ 0.97559 │ 17.668… │
+│         │          │         │ 20, 20)  │       │        │         │         │
+├─────────┼──────────┼─────────┼──────────┼───────┼────────┼─────────┼─────────┤
+│ output… │ AxDequa… │ output… │ (1, 84,  │ FP32  │  FP32  │ 0.97568 │ 16.842… │
+│         │          │         │ 20, 20)  │       │        │         │         │
+└─────────┴──────────┴─────────┴──────────┴───────┴────────┴─────────┴─────────┘
+2026-09-18 12:20:44.268 | INFO     | axnn.yamain.command.precision_analysis:quant_precision_analysis:403 - save precision analysis table to [../build/u8/quant/debug/precision_analysis_table.txt]
+2026-09-18 12:20:44.273 | INFO     | axnn.yamain.command.precision_analysis:quant_precision_analysis:411 - save precision analysis graph to [../build/u8/quant/debug/precision_analysis.mmd]
+Building native ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
+2026-09-18 12:20:44.469 | INFO     | axnn.yamain.command.build:compile_ptq_model:1164 - group 0 compiler transformation
+2026-09-18 12:20:44.472 | WARNING  | axnn.yamain.command.load_model:pre_process:621 - preprocess tensor [images]
+2026-09-18 12:20:44.472 | INFO     | axnn.yamain.command.load_model:pre_process:623 - tensor: images, (1, 640, 640, 3), U8
+2026-09-18 12:20:44.473 | INFO     | axnn.yamain.command.load_model:pre_process:624 - op: op:pre_dequant_1, AxDequantizeLinear, {'const_inputs': {'x_zeropoint': array(0, dtype=int32), 'x_scale': array(1., dtype=float32)}, 'output_dtype': <class 'numpy.float32'>, 'quant_method': 0}
+2026-09-18 12:20:44.473 | INFO     | axnn.yamain.command.load_model:pre_process:623 - tensor: tensor:pre_norm_1, (1, 640, 640, 3), FP32
+2026-09-18 12:20:44.473 | INFO     | axnn.yamain.command.load_model:pre_process:624 - op: op:pre_norm_1, AxNormalize, {'dim': 3, 'mean': [0.0, 0.0, 0.0], 'std': [255.0, 255.0, 255.0], 'output_dtype': FP32}
+2026-09-18 12:20:44.473 | INFO     | axnn.yamain.command.load_model:pre_process:623 - tensor: tensor:pre_transpose_1, (1, 640, 640, 3), FP32
+2026-09-18 12:20:44.473 | INFO     | axnn.yamain.command.load_model:pre_process:624 - op: op:pre_transpose_1, AxTranspose, {'perm': [0, 3, 1, 2]}
+2026-09-18 12:20:44.473 | WARNING  | axnn.yamain.command.load_model:post_process:632 - postprocess tensor [output_split_0]
+2026-09-18 12:20:44.473 | INFO     | axnn.yamain.command.load_model:handle_postprocess:637 - op: op:post_transpose_1, AxTranspose
+2026-09-18 12:20:44.474 | WARNING  | axnn.yamain.command.load_model:post_process:632 - postprocess tensor [output_split_1]
+2026-09-18 12:20:44.474 | INFO     | axnn.yamain.command.load_model:handle_postprocess:637 - op: op:post_transpose_2, AxTranspose
+2026-09-18 12:20:44.474 | WARNING  | axnn.yamain.command.load_model:post_process:632 - postprocess tensor [output_split_2]
+2026-09-18 12:20:44.474 | INFO     | axnn.yamain.command.load_model:handle_postprocess:637 - op: op:post_transpose_3, AxTranspose
+2026-09-18 12:20:44.478 | INFO     | axnn.yamain.command.load_model:ir_compiler_transformation:827 - use random data as gt input: images, uint8, (1, 640, 640, 3)
+2026-09-18 12:20:47.276 | INFO     | axnn.yamain.command.build:compile_ptq_model:1185 - group 0 QuantAxModel macs: 2,740,153,600
+2026-09-18 12:20:47.444 | INFO     | axnn.yamain.command.build:compile_ptq_model:1320 - subgraph [0], group: 0, type: GraphType.NPU
+2026-09-18 12:20:47.445 | INFO     | axnn.yamain.compiler.npu_backend_compiler:compile:206 - compile npu subgraph [0]
+tiling op...   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 278/278 0:00:08
+new_ddr_tensor = []
+build op serially...   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 858/858 0:00:21
+build op...   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1622/1622 0:00:06
+add ddr swap...   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2887/2887 0:00:01
+calc input dependencies...   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3415/3415 0:00:01
+calc output dependencies...   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3415/3415 0:00:01
+assign eu heuristic   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3415/3415 0:00:00
+assign eu onepass   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3415/3415 0:00:00
+assign eu greedy   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3415/3415 0:00:00
+2026-09-18 12:21:33.947 | INFO     | axnn.yasched.test_onepass:results2model_gen:3239 - clear job deps
+2026-09-18 12:21:33.947 | INFO     | axnn.yasched.test_onepass:results2model_gen:3240 - max_cycle = 6,002,947
+build jobs   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3415/3415 0:00:03
+2026-09-18 12:21:38.240 | INFO     | axnn.yamain.compiler.npu_backend_compiler:compile:310 - assemble model [0] [subgraph_npu_0] b1
+2026-09-18 12:21:48.251 | DEBUG    | axnn.backend.ax620e.linker:link_with_dispatcher:1935 - eu_chunk time_limit: False
+2026-09-18 12:21:48.252 | DEBUG    | axnn.backend.ax620e.linker:link_with_dispatcher:1936 - eu_chunk only_bysize: True
+2026-09-18 12:22:06.837 | INFO     | axnn.backend.ax620e.linker:link_with_dispatcher:2004 - DispatcherQueueType.IO: Generate 26 EU chunks, 4 Dispatcher Chunk
+2026-09-18 12:22:06.837 | INFO     | axnn.backend.ax620e.linker:link_with_dispatcher:2004 - DispatcherQueueType.Compute: Generate 47 EU chunks, 9 Dispatcher Chunk
+2026-09-18 12:22:06.837 | INFO     | axnn.backend.ax620e.linker:link_with_dispatcher:2005 - EU mcode size: 163 KiB
+2026-09-18 12:22:06.837 | INFO     | axnn.backend.ax620e.linker:link_with_dispatcher:2006 - Dispatcher mcode size: 10 KiB
+2026-09-18 12:22:06.837 | INFO     | axnn.backend.ax620e.linker:link_with_dispatcher:2007 - Total mcode size: 173 KiB
+2026-09-18 12:22:06.868 | INFO     | axnn.yamain.command.build:compile_ptq_model:1367 - fuse 1 subgraph(s)

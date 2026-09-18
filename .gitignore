@@ -1,0 +1,9 @@
+# local build / temp artifacts
+build/
+.work_tmp/
+.p2_home/
+dataset/*.zip
+dataset/*.tar
+onnx/*.pt
+__pycache__/
+*.pyc

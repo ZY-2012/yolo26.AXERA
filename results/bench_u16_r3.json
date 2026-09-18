@@ -1,0 +1,24 @@
+{
+  "chip": "AX630C_CHIP",
+  "model": "yolo26n_u16.axmodel",
+  "input": "input_640.npy",
+  "bench": {
+    "model": "yolo26n_u16.axmodel",
+    "repeat": 100,
+    "total_ms": 2007.734255050309,
+    "avg_ms": 20.07734255050309,
+    "min_ms": 19.410706940107048,
+    "max_ms": 21.91199699882418,
+    "p50_ms": 19.91991000249982,
+    "p90_ms": 20.93136205803603,
+    "p99_ms": 21.32341603282839,
+    "std_ms": 0.5495271089964009,
+    "sys_cpu_pct": 18.23821339950372,
+    "proc_cpu_pct": 23.399388583166896,
+    "throughput_fps": 49.78593315567425,
+    "ncpu": 2,
+    "chip": "AX630C_CHIP",
+    "python": "3.10.12",
+    "axengine": "unknown"
+  }
+}

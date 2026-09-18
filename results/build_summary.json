@@ -1,0 +1,119 @@
+{
+  "u8": {
+    "target_hardware": "AX620E",
+    "npu_mode": "NPU2",
+    "subgraphs": [
+      {
+        "index": 0,
+        "type": "NPU",
+        "macs": 2740153600,
+        "estimated_cycles": 6002946,
+        "eu_kinds": [
+          "CONV",
+          "CONV",
+          "TENG",
+          "SDMA"
+        ]
+      }
+    ],
+    "axmodel_size_bytes": 2746549,
+    "input_tensor": {
+      "images": {
+        "name": "images",
+        "shape": [
+          1,
+          3,
+          640,
+          640
+        ],
+        "dtype": "FP32",
+        "from_op": null,
+        "to_ops": [],
+        "is_input": false,
+        "is_output": false,
+        "is_const": false,
+        "data": null,
+        "scale": null,
+        "zero_point": null
+      }
+    }
+  },
+  "u16": {
+    "target_hardware": "AX620E",
+    "npu_mode": "NPU2",
+    "subgraphs": [
+      {
+        "index": 0,
+        "type": "NPU",
+        "macs": 5603187200,
+        "estimated_cycles": 13572167,
+        "eu_kinds": [
+          "CONV",
+          "CONV",
+          "TENG",
+          "SDMA"
+        ]
+      }
+    ],
+    "axmodel_size_bytes": 3378342,
+    "input_tensor": {
+      "images": {
+        "name": "images",
+        "shape": [
+          1,
+          3,
+          640,
+          640
+        ],
+        "dtype": "FP32",
+        "from_op": null,
+        "to_ops": [],
+        "is_input": false,
+        "is_output": false,
+        "is_const": false,
+        "data": null,
+        "scale": null,
+        "zero_point": null
+      }
+    }
+  },
+  "mix": {
+    "target_hardware": "AX620E",
+    "npu_mode": "NPU2",
+    "subgraphs": [
+      {
+        "index": 0,
+        "type": "NPU",
+        "macs": 3356940800,
+        "estimated_cycles": 8342583,
+        "eu_kinds": [
+          "CONV",
+          "CONV",
+          "TENG",
+          "SDMA"
+        ]
+      }
+    ],
+    "axmodel_size_bytes": 3068045,
+    "input_tensor": {
+      "images": {
+        "name": "images",
+        "shape": [
+          1,
+          3,
+          640,
+          640
+        ],
+        "dtype": "FP32",
+        "from_op": null,
+        "to_ops": [],
+        "is_input": false,
+        "is_output": false,
+        "is_const": false,
+        "data": null,
+        "scale": null,
+        "zero_point": null
+      }
+    }
+  }
+}

@@ -1,0 +1,312 @@
+==> preparing /root/yolo26_bench on root@<board-ip>
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> copying files
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> idle baseline
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+[INFO] Available providers:  ['AxEngineExecutionProvider']
+idle system CPU over 5.0s: 1.9 %
+[INFO] Using provider: AxEngineExecutionProvider
+[INFO] Chip type: ChipType.MC20E
+[INFO] VNPU type: VNPUType.DISABLED
+[INFO] Engine version: 2.7.2a
+[INFO] Model type: 1 (full core)
+[INFO] Compiler version: 7.0 6b1bcdf8
+
+Benchmark Results
+  Model          : yolo26n_u8.axmodel
+  Repeat count   : 1
+  Total time     : 33.29 ms
+  Avg latency    : 33.294 ms (33294.4 us)
+  Min latency    : 33.294 ms (33294.4 us)
+  Max latency    : 33.294 ms (33294.4 us)
+  P50 latency    : 33.294 ms (33294.4 us)
+  P90 latency    : 33.294 ms (33294.4 us)
+  P99 latency    : 33.294 ms (33294.4 us)
+  CPU usage      : 36.4 %  (system, 2 cores)
+  Process CPU    : 90.0 %  (this python process)
+  Throughput     : 30.0 fps
+json -> results/idle.json
+==> round 1 model u8
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+[INFO] Available providers:  ['AxEngineExecutionProvider']
+[INFO] Using provider: AxEngineExecutionProvider
+[INFO] Chip type: ChipType.MC20E
+[INFO] VNPU type: VNPUType.DISABLED
+[INFO] Engine version: 2.7.2a
+[INFO] Model type: 1 (full core)
+[INFO] Compiler version: 7.0 6b1bcdf8
+
+Benchmark Results
+  Model          : yolo26n_u8.axmodel
+  Repeat count   : 100
+  Total time     : 1120.54 ms
+  Avg latency    : 11.205 ms (11205.4 us)
+  Min latency    : 10.821 ms (10820.7 us)
+  Max latency    : 11.977 ms (11976.6 us)
+  P50 latency    : 11.171 ms (11171.0 us)
+  P90 latency    : 11.486 ms (11486.0 us)
+  P99 latency    : 11.663 ms (11663.5 us)
+  CPU usage      : 23.9 %  (system, 2 cores)
+  Process CPU    : 42.8 %  (this python process)
+  Throughput     : 89.2 fps
+json -> results/bench_u8_r1.json
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> round 1 model u16
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+[INFO] Available providers:  ['AxEngineExecutionProvider']
+[INFO] Using provider: AxEngineExecutionProvider
+[INFO] Chip type: ChipType.MC20E
+[INFO] VNPU type: VNPUType.DISABLED
+[INFO] Engine version: 2.7.2a
+[INFO] Model type: 1 (full core)
+[INFO] Compiler version: 7.0 6b1bcdf8
+
+Benchmark Results
+  Model          : yolo26n_u16.axmodel
+  Repeat count   : 100
+  Total time     : 1997.36 ms
+  Avg latency    : 19.974 ms (19973.6 us)
+  Min latency    : 19.410 ms (19409.8 us)
+  Max latency    : 21.727 ms (21726.6 us)
+  P50 latency    : 19.815 ms (19814.8 us)
+  P90 latency    : 20.688 ms (20687.8 us)
+  P99 latency    : 21.357 ms (21357.3 us)
+  CPU usage      : 7.6 %  (system, 2 cores)
+  Process CPU    : 23.5 %  (this python process)
+  Throughput     : 50.0 fps
+json -> results/bench_u16_r1.json
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> round 1 model mix
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+[INFO] Available providers:  ['AxEngineExecutionProvider']
+[INFO] Using provider: AxEngineExecutionProvider
+[INFO] Chip type: ChipType.MC20E
+[INFO] VNPU type: VNPUType.DISABLED
+[INFO] Engine version: 2.7.2a
+[INFO] Model type: 1 (full core)
+[INFO] Compiler version: 7.0 6b1bcdf8
+
+Benchmark Results
+  Model          : yolo26n_mix.axmodel
+  Repeat count   : 100
+  Total time     : 1386.55 ms
+  Avg latency    : 13.865 ms (13865.5 us)
+  Min latency    : 13.472 ms (13472.4 us)
+  Max latency    : 16.102 ms (16102.3 us)
+  P50 latency    : 13.821 ms (13820.6 us)
+  P90 latency    : 14.195 ms (14194.5 us)
+  P99 latency    : 14.827 ms (14827.1 us)
+  CPU usage      : 24.4 %  (system, 2 cores)
+  Process CPU    : 34.6 %  (this python process)
+  Throughput     : 72.1 fps
+json -> results/bench_mix_r1.json
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> round 2 model u8
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+[INFO] Available providers:  ['AxEngineExecutionProvider']
+[INFO] Using provider: AxEngineExecutionProvider
+[INFO] Chip type: ChipType.MC20E
+[INFO] VNPU type: VNPUType.DISABLED
+[INFO] Engine version: 2.7.2a
+[INFO] Model type: 1 (full core)
+[INFO] Compiler version: 7.0 6b1bcdf8
+
+Benchmark Results
+  Model          : yolo26n_u8.axmodel
+  Repeat count   : 100
+  Total time     : 1115.17 ms
+  Avg latency    : 11.152 ms (11151.7 us)
+  Min latency    : 10.782 ms (10781.8 us)
+  Max latency    : 11.756 ms (11756.1 us)
+  P50 latency    : 11.102 ms (11102.3 us)
+  P90 latency    : 11.418 ms (11418.1 us)
+  P99 latency    : 11.671 ms (11670.9 us)
+  CPU usage      : 21.9 %  (system, 2 cores)
+  Process CPU    : 43.0 %  (this python process)
+  Throughput     : 89.6 fps
+json -> results/bench_u8_r2.json
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> round 2 model u16
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+[INFO] Available providers:  ['AxEngineExecutionProvider']
+[INFO] Using provider: AxEngineExecutionProvider
+[INFO] Chip type: ChipType.MC20E
+[INFO] VNPU type: VNPUType.DISABLED
+[INFO] Engine version: 2.7.2a
+[INFO] Model type: 1 (full core)
+[INFO] Compiler version: 7.0 6b1bcdf8
+
+Benchmark Results
+  Model          : yolo26n_u16.axmodel
+  Repeat count   : 100
+  Total time     : 2003.06 ms
+  Avg latency    : 20.031 ms (20030.6 us)
+  Min latency    : 19.396 ms (19396.4 us)
+  Max latency    : 21.654 ms (21653.8 us)
+  P50 latency    : 19.831 ms (19830.6 us)
+  P90 latency    : 20.927 ms (20926.7 us)
+  P99 latency    : 21.506 ms (21506.0 us)
+  CPU usage      : 15.9 %  (system, 2 cores)
+  Process CPU    : 24.0 %  (this python process)
+  Throughput     : 49.9 fps
+json -> results/bench_u16_r2.json
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> round 2 model mix
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+[INFO] Available providers:  ['AxEngineExecutionProvider']
+[INFO] Using provider: AxEngineExecutionProvider
+[INFO] Chip type: ChipType.MC20E
+[INFO] VNPU type: VNPUType.DISABLED
+[INFO] Engine version: 2.7.2a
+[INFO] Model type: 1 (full core)
+[INFO] Compiler version: 7.0 6b1bcdf8
+
+Benchmark Results
+  Model          : yolo26n_mix.axmodel
+  Repeat count   : 100
+  Total time     : 1383.39 ms
+  Avg latency    : 13.834 ms (13833.9 us)
+  Min latency    : 13.492 ms (13492.4 us)
+  Max latency    : 14.951 ms (14951.3 us)
+  P50 latency    : 13.804 ms (13803.8 us)
+  P90 latency    : 14.104 ms (14103.7 us)
+  P99 latency    : 14.849 ms (14849.1 us)
+  CPU usage      : 19.0 %  (system, 2 cores)
+  Process CPU    : 34.7 %  (this python process)
+  Throughput     : 72.2 fps
+json -> results/bench_mix_r2.json
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> round 3 model u8
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+[INFO] Available providers:  ['AxEngineExecutionProvider']
+[INFO] Using provider: AxEngineExecutionProvider
+[INFO] Chip type: ChipType.MC20E
+[INFO] VNPU type: VNPUType.DISABLED
+[INFO] Engine version: 2.7.2a
+[INFO] Model type: 1 (full core)
+[INFO] Compiler version: 7.0 6b1bcdf8
+
+Benchmark Results
+  Model          : yolo26n_u8.axmodel
+  Repeat count   : 100
+  Total time     : 1116.33 ms
+  Avg latency    : 11.163 ms (11163.3 us)
+  Min latency    : 10.777 ms (10776.9 us)
+  Max latency    : 12.052 ms (12052.3 us)
+  P50 latency    : 11.143 ms (11142.8 us)
+  P90 latency    : 11.429 ms (11428.8 us)
+  P99 latency    : 11.676 ms (11676.2 us)
+  CPU usage      : 21.7 %  (system, 2 cores)
+  Process CPU    : 43.9 %  (this python process)
+  Throughput     : 89.5 fps
+json -> results/bench_u8_r3.json
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> round 3 model u16
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+[INFO] Available providers:  ['AxEngineExecutionProvider']
+[INFO] Using provider: AxEngineExecutionProvider
+[INFO] Chip type: ChipType.MC20E
+[INFO] VNPU type: VNPUType.DISABLED
+[INFO] Engine version: 2.7.2a
+[INFO] Model type: 1 (full core)
+[INFO] Compiler version: 7.0 6b1bcdf8
+
+Benchmark Results
+  Model          : yolo26n_u16.axmodel
+  Repeat count   : 100
+  Total time     : 2007.73 ms
+  Avg latency    : 20.077 ms (20077.3 us)
+  Min latency    : 19.411 ms (19410.7 us)
+  Max latency    : 21.912 ms (21912.0 us)
+  P50 latency    : 19.920 ms (19919.9 us)
+  P90 latency    : 20.931 ms (20931.4 us)
+  P99 latency    : 21.323 ms (21323.4 us)
+  CPU usage      : 18.2 %  (system, 2 cores)
+  Process CPU    : 23.4 %  (this python process)
+  Throughput     : 49.8 fps
+json -> results/bench_u16_r3.json
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> round 3 model mix
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+[INFO] Available providers:  ['AxEngineExecutionProvider']
+[INFO] Using provider: AxEngineExecutionProvider
+[INFO] Chip type: ChipType.MC20E
+[INFO] VNPU type: VNPUType.DISABLED
+[INFO] Engine version: 2.7.2a
+[INFO] Model type: 1 (full core)
+[INFO] Compiler version: 7.0 6b1bcdf8
+
+Benchmark Results
+  Model          : yolo26n_mix.axmodel
+  Repeat count   : 100
+  Total time     : 1381.67 ms
+  Avg latency    : 13.817 ms (13816.7 us)
+  Min latency    : 13.477 ms (13476.5 us)
+  Max latency    : 15.127 ms (15126.7 us)
+  P50 latency    : 13.839 ms (13839.0 us)
+  P90 latency    : 13.977 ms (13976.9 us)
+  P99 latency    : 14.277 ms (14277.4 us)
+  CPU usage      : 18.7 %  (system, 2 cores)
+  Process CPU    : 34.7 %  (this python process)
+  Throughput     : 72.3 fps
+json -> results/bench_mix_r3.json
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> ax_run_model cross-check
+--- ax_run_model u8
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+          type: Full
+          vnpu: Disable
+      affinity: 0b01
+        warmup: 10
+        repeat: 100
+         batch: { auto: 0 }
+   pulsar2 ver: 7.0 6b1bcdf8
+    engine ver: 2.7.2a
+      tool ver: 2.3.3sp
+      cmm size: 5197249 Bytes
+  ---------------------------------------------------------------------------
+  min =   6.252 ms   max =   6.615 ms   avg =   6.349 ms  median =   6.336 ms
+   5% =   6.253 ms   90% =   6.539 ms   95% =   6.548 ms     99% =   6.615 ms
+  ---------------------------------------------------------------------------
+
+--- ax_run_model u16
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+          type: Full
+          vnpu: Disable
+      affinity: 0b01
+        warmup: 10
+        repeat: 100
+         batch: { auto: 0 }
+   pulsar2 ver: 7.0 6b1bcdf8
+    engine ver: 2.7.2a
+      tool ver: 2.3.3sp
+      cmm size: 11563442 Bytes
+  ---------------------------------------------------------------------------
+  min =  14.883 ms   max =  15.957 ms   avg =  15.264 ms  median =  15.183 ms
+   5% =  14.897 ms   90% =  15.879 ms   95% =  15.918 ms     99% =  15.957 ms
+  ---------------------------------------------------------------------------
+
+--- ax_run_model mix
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+          type: Full
+          vnpu: Disable
+      affinity: 0b01
+        warmup: 10
+        repeat: 100
+         batch: { auto: 0 }
+   pulsar2 ver: 7.0 6b1bcdf8
+    engine ver: 2.7.2a
+      tool ver: 2.3.3sp
+      cmm size: 7157145 Bytes
+  ---------------------------------------------------------------------------
+  min =   8.886 ms   max =   9.480 ms   avg =   9.004 ms  median =   8.965 ms
+   5% =   8.887 ms   90% =   9.190 ms   95% =   9.205 ms     99% =   9.480 ms
+  ---------------------------------------------------------------------------
+
+Warning: Permanently added '<board-ip>' (ED25519) to the list of known hosts.
+==> done, results in /data/shared/huyuan/YOLO/yolo26_620e_cpu_bench/results
