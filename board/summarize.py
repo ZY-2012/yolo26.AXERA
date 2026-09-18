@@ -64,7 +64,7 @@ def main() -> None:
         }
         if model in native:
             entry["native_ax_run_model"] = native[model]
-            entry["host_overhead_ms"] = avg - native[model]["avg"]
+            entry["cpu_overhead_ms"] = avg - native[model]["avg"]
         out["models"][model] = entry
     out["board"] = next((v["chip"] for v in out["models"].values()), "unknown")
     (RESULTS / "comparison.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
@@ -73,12 +73,12 @@ def main() -> None:
         print(f"\nidle system CPU: {out['idle_sys_cpu_pct']:.1f} %")
     print(
         f"{'model':5s} {'avg_ms':>8s} {'min_ms':>8s} {'p50_ms':>8s} {'p90_ms':>8s} {'p99_ms':>8s} "
-        f"{'procCPU%':>9s} {'sysCPU%':>8s} {'fps':>7s} {'native_ms':>10s} {'host_ms':>8s}"
+        f"{'procCPU%':>9s} {'sysCPU%':>8s} {'fps':>7s} {'native_ms':>10s} {'cpu_ms':>8s}"
     )
     for model in sorted(out["models"], key=lambda m: ORDER.index(m) if m in ORDER else 99):
         v = out["models"][model]
         native_avg = v.get("native_ax_run_model", {}).get("avg", float("nan"))
-        overhead = v.get("host_overhead_ms", float("nan"))
+        overhead = v.get("cpu_overhead_ms", float("nan"))
         print(
             f"{model:5s} {v['avg_ms']:8.3f} {v['min_ms']:8.3f} {v['p50_ms']:8.3f} {v['p90_ms']:8.3f} "
             f"{v['p99_ms']:8.3f} {v['proc_cpu_pct']:9.1f} {v['sys_cpu_pct']:8.1f} {v['throughput_fps']:7.1f} "

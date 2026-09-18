@@ -2,7 +2,7 @@
 
 YOLO26n 在 AX620E（AX630C）上的 **U8 / U16 / 混合量化** 推理对比复现：主机负责导出与量化，板端负责推理与 CPU 占用对比。
 
-**结论：混合量化不会把算子放到 CPU。** 三个模型编译后都只有 1 个 NPU 子图、0 个 CPU 子图；板端 CPU 占用只由「每帧固定的 host 开销 ÷ 单帧耗时」决定，与量化精度分配无关。
+**结论：混合量化不会把算子放到 CPU。** 三个模型编译后都只有 1 个 NPU 子图、0 个 CPU 子图；板端 CPU 占用只由「每帧固定的 CPU（host）侧开销 ÷ 单帧耗时」决定，与量化精度分配无关。
 
 ## 目录结构
 
@@ -20,7 +20,7 @@ reports/     summary.md（完整分析报告）
 
 ## 数据文件
 
-- `results/comparison.json`：三模型板端汇总（含 native / host overhead）
+- `results/comparison.json`：三模型板端汇总（含 `ax_run_model` 原生延迟与 CPU 侧开销）
 - `results/bench_<model>_r<1..3>.json`：原始每轮数据
 - `results/ax_run_model.txt`：板端原生工具交叉验证
 - `results/precision_summary.json`：量化精度分析（输出 cosine）
@@ -111,7 +111,9 @@ bash run_bench.sh
 | 混合 | 13.810 ms | 13.480 | 13.803 | 14.022 | 14.414 | 34.7% | 21.3% | 72.4 fps | 8.996 ms |
 | U16 | 19.978 ms | 19.376 | 19.832 | 20.783 | 21.432 | 23.7% | 8.6% | 50.0 fps | 15.279 ms |
 
-**关键分析**：host 侧固定开销 = Python 延迟 − `ax_run_model` 原生延迟 ≈ **4.8 ms**（4.81 / 4.81 / 4.70），进程 CPU% ≈ 4.8 / 单帧耗时：
+**关键分析**：CPU（host）侧固定开销 = Python 延迟 − `ax_run_model` 原生延迟 ≈ **4.8 ms**（4.81 / 4.81 / 4.70），进程 CPU% ≈ 4.8 / 单帧耗时。
+
+> 术语说明：这里的 host 指**板子的 CPU**（相对 NPU 而言），不是 x86 主机。axmodel 在 NPU 上执行，每帧的输入准备、内存搬运、Python/axengine 框架调用、输出拷贝都跑在这颗 CPU 上；`ax_run_model` 是官方 C 工具、同样在板端 CPU 上，但只有极少的框架开销，两者差值就是 Python demo 的固定 CPU 开销。
 
 - U8：4.81 / 11.16 = 43.1%（实测 42.7%）
 - 混合：4.81 / 13.81 = 34.9%（实测 34.7%）
