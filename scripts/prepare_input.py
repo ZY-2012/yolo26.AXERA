@@ -22,14 +22,25 @@ def letterbox(image: np.ndarray, size: int = 640) -> np.ndarray:
     return cv2.copyMakeBorder(resized, top, bottom, left, right, cv2.BORDER_CONSTANT, value=(114, 114, 114))
 
 
+BUS_URL = "https://github.com/ultralytics/assets/releases/download/v0.0.0/bus.jpg"
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--image", default="/data/shared/huyuan/YOLO/YOLO26.axera/bus.jpg")
-    ap.add_argument("--out", default=str(ROOT / "board" / "input_640.npy"))
+    ap.add_argument("--image", default=str(ROOT / "artifacts" / "bus.jpg"))
+    ap.add_argument("--out", default=str(ROOT / "artifacts" / "input_640.npy"))
     args = ap.parse_args()
 
-    img = cv2.imread(args.image)
-    assert img is not None, args.image
+    image = Path(args.image)
+    if not image.exists():
+        import urllib.request
+
+        image.parent.mkdir(parents=True, exist_ok=True)
+        print(f"downloading {BUS_URL} -> {image}")
+        urllib.request.urlretrieve(BUS_URL, image)
+
+    img = cv2.imread(str(image))
+    assert img is not None, image
     lb = letterbox(img, 640)
     rgb = cv2.cvtColor(lb, cv2.COLOR_BGR2RGB)
     tensor = rgb[None, ...].astype(np.uint8)  # (1,640,640,3) NHWC U8

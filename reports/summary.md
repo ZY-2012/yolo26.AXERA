@@ -33,16 +33,16 @@
 
 | 变体 | avg | min | P50 | P90 | P99 | 进程 CPU | 系统 CPU | 吞吐 | 原生 ax_run_model avg |
 |------|-----|-----|-----|-----|-----|----------|----------|------|----------------------|
-| U8 | 11.174 ms | 10.777 | 11.139 | 11.444 | 11.676 | 43.2% | 22.5% | 89.4 fps | 6.349 ms |
-| U16 | 20.027 ms | 19.396 | 19.855 | 20.849 | 21.506 | 23.6% | 13.9% | 49.9 fps | 15.264 ms |
-| 混合 | 13.839 ms | 13.472 | 13.821 | 14.092 | 14.849 | 34.7% | 20.7% | 72.2 fps | 9.004 ms |
+| U8 | 11.171 ms | 10.755 | 11.101 | 11.414 | 12.364 | 42.3% | 26.1% | 89.5 fps | 6.360 ms |
+| U16 | 20.051 ms | 19.401 | 19.908 | 20.676 | 22.017 | 23.9% | 19.7% | 49.9 fps | 15.297 ms |
+| 混合 | 13.895 ms | 13.495 | 13.864 | 14.132 | 14.874 | 34.8% | 26.9% | 71.9 fps | 9.044 ms |
 
-- 空载系统 CPU：1.9%（5 s 采样）。
-- host 固定开销 = Python avg − 原生 avg：U8 4.83 ms / U16 4.76 ms / 混合 4.84 ms。
+- 空载系统 CPU：约 4–5%（5 s 采样，板端后台负载有波动，多测几次 4.1 / 4.9 / 5.3%）。
+- host 固定开销 = Python avg − 原生 avg：U8 4.81 ms / U16 4.75 ms / 混合 4.85 ms。
 - 进程 CPU% ≈ host 开销 / 帧耗时 × 100%：
-  - U8：4.83 / 11.17 = 43.2%（实测 43.2%）
-  - U16：4.76 / 20.03 = 23.8%（实测 23.6%）
-  - 混合：4.84 / 13.84 = 35.0%（实测 34.7%）
+  - U8：4.81 / 11.17 = 43.1%（实测 42.3%）
+  - U16：4.75 / 20.05 = 23.7%（实测 23.9%）
+  - 混合：4.85 / 13.90 = 34.9%（实测 34.8%）
 
 ## 测量口径
 
@@ -62,11 +62,12 @@
 
 ## 复现入口
 
-- 工作目录：`/data/shared/huyuan/YOLO/yolo26_620e_cpu_bench/`
-- 关键脚本：`scripts/export_yolo26n.py`、`scripts/build_split_onnx.py`、`scripts/make_configs.py`、`scripts/compile.py`、`scripts/board_bench.sh`、`demo/bench_cpu.py`
-- 原始数据：`results/bench_{u8,u16,mix}_r{1,2,3}.json`、`results/idle.json`、`results/precision_summary.json`
-- 编译日志：`logs/{u8,u16,mix}.log`；产物：`build/{u8,u16,mix}/*.axmodel`
-- 全程临时文件在 `yolo26_620e_cpu_bench/.work_tmp/`，未使用 `/tmp`。
+- 仓库：`https://github.com/ZY-2012/yolo26.AXERA`
+- 主机分步脚本：`host/01_export_onnx.sh` … `host/08_summarize.sh`（授权自动处理，无需 export）
+- 板端脚本：`board/run_bench.sh` + `board/bench_cpu.py`
+- 原始数据：`results/bench_{u8,u16,mix}_r{1,2,3}.json`、`results/comparison.json`、`results/ax_run_model.txt`、`results/precision_summary.json`
+- 编译日志：`logs/{u8,u16,mix}.log`；产物：`models/*.axmodel`
+- 全程临时文件在 `.work_tmp/`，未使用 `/tmp`。
 
 ## 备注 / 偏差说明
 

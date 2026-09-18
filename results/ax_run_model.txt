@@ -1,0 +1,49 @@
+==> ax_run_model cross-check
+--- u8: yolo26n_u8.axmodel
+          type: Full
+          vnpu: Disable
+      affinity: 0b01
+        warmup: 10
+        repeat: 100
+         batch: { auto: 0 }
+   pulsar2 ver: 7.0 6b1bcdf8
+    engine ver: 2.7.2a
+      tool ver: 2.3.3sp
+      cmm size: 5197249 Bytes
+  ---------------------------------------------------------------------------
+  min =   6.249 ms   max =   6.554 ms   avg =   6.348 ms  median =   6.334 ms
+   5% =   6.251 ms   90% =   6.536 ms   95% =   6.543 ms     99% =   6.554 ms
+  ---------------------------------------------------------------------------
+
+--- mix: yolo26n_e3_mix.axmodel
+          type: Full
+          vnpu: Disable
+      affinity: 0b01
+        warmup: 10
+        repeat: 100
+         batch: { auto: 0 }
+   pulsar2 ver: 7.0 6b1bcdf8
+    engine ver: 2.7.2a
+      tool ver: 2.3.3sp
+      cmm size: 7157145 Bytes
+  ---------------------------------------------------------------------------
+  min =   8.882 ms   max =   9.333 ms   avg =   8.996 ms  median =   8.971 ms
+   5% =   8.883 ms   90% =   9.193 ms   95% =   9.219 ms     99% =   9.333 ms
+  ---------------------------------------------------------------------------
+
+--- u16: yolo26n_u16.axmodel
+          type: Full
+          vnpu: Disable
+      affinity: 0b01
+        warmup: 10
+        repeat: 100
+         batch: { auto: 0 }
+   pulsar2 ver: 7.0 6b1bcdf8
+    engine ver: 2.7.2a
+      tool ver: 2.3.3sp
+      cmm size: 11563442 Bytes
+  ---------------------------------------------------------------------------
+  min =  14.879 ms   max =  16.596 ms   avg =  15.279 ms  median =  15.185 ms
+   5% =  14.888 ms   90% =  15.872 ms   95% =  15.917 ms     99% =  16.596 ms
+  ---------------------------------------------------------------------------
+
