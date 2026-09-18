@@ -22,7 +22,8 @@ RAW = ONNX_DIR / "yolo26n_raw.onnx"
 OUT = ONNX_DIR / "yolo26n.onnx"
 CUSTOMER_CFG = ROOT / "configs" / "customer_exp_e3_mix.json"
 
-sys.path.insert(0, os.environ.get("ULTRALYTICS_REPO", "/data/shared/huyuan/YOLO/ultralytics"))
+if os.environ.get("ULTRALYTICS_REPO"):
+    sys.path.insert(0, os.environ["ULTRALYTICS_REPO"])
 
 
 def raw_one2one_forward(self, x):

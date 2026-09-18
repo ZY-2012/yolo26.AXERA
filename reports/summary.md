@@ -2,7 +2,7 @@
 
 日期：2026-09-18
 板子：`root@10.126.29.186`（AX630C_CHIP / ChipType.MC20E，2 核，engine 2.7.2a）
-工具链：Pulsar2 7.0（docker `docker-registry.aitsw.axera-tech.com/pulsar2:7.0`）
+工具链：Pulsar2 7.0（主机激活 Pulsar2 环境后执行 `pulsar2 build`）
 模型：公开 ultralytics `yolo26n.pt`，end2end one2one 头切成 3 个输出（`output_split_0/1/2`，1×84×80×80 / 1×84×40×40 / 1×84×20×20），对齐客户 `exp_e3_mix.json` 的 42 个 layer 名与 output_processors。
 校准集：`dataset/images100.tar`（coco128 取 100 张）。
 
@@ -33,16 +33,16 @@
 
 | 变体 | avg | min | P50 | P90 | P99 | 进程 CPU | 系统 CPU | 吞吐 | 原生 ax_run_model avg |
 |------|-----|-----|-----|-----|-----|----------|----------|------|----------------------|
-| U8 | 11.171 ms | 10.755 | 11.101 | 11.414 | 12.364 | 42.3% | 26.1% | 89.5 fps | 6.360 ms |
-| U16 | 20.051 ms | 19.401 | 19.908 | 20.676 | 22.017 | 23.9% | 19.7% | 49.9 fps | 15.297 ms |
-| 混合 | 13.895 ms | 13.495 | 13.864 | 14.132 | 14.874 | 34.8% | 26.9% | 71.9 fps | 9.044 ms |
+| U8 | 11.157 ms | 10.768 | 11.083 | 11.476 | 12.612 | 42.7% | 24.0% | 89.6 fps | 6.348 ms |
+| U16 | 19.978 ms | 19.376 | 19.832 | 20.783 | 21.432 | 23.7% | 8.6% | 50.0 fps | 15.279 ms |
+| 混合 | 13.810 ms | 13.480 | 13.803 | 14.022 | 14.414 | 34.7% | 21.3% | 72.4 fps | 8.996 ms |
 
 - 空载系统 CPU：约 4–5%（5 s 采样，板端后台负载有波动，多测几次 4.1 / 4.9 / 5.3%）。
-- host 固定开销 = Python avg − 原生 avg：U8 4.81 ms / U16 4.75 ms / 混合 4.85 ms。
+- host 固定开销 = Python avg − 原生 avg：U8 4.81 ms / U16 4.70 ms / 混合 4.81 ms。
 - 进程 CPU% ≈ host 开销 / 帧耗时 × 100%：
-  - U8：4.81 / 11.17 = 43.1%（实测 42.3%）
-  - U16：4.75 / 20.05 = 23.7%（实测 23.9%）
-  - 混合：4.85 / 13.90 = 34.9%（实测 34.8%）
+  - U8：4.81 / 11.16 = 43.1%（实测 42.7%）
+  - U16：4.70 / 19.98 = 23.5%（实测 23.7%）
+  - 混合：4.81 / 13.81 = 34.9%（实测 34.7%）
 
 ## 测量口径
 
@@ -50,21 +50,21 @@
   - 延迟：`session.run` 前后 `perf_counter`，100 次统计 min/max/avg/P50/P90/P99。
   - 系统 CPU：`/proc/stat` 基准窗口前后 busy/total（全部核，0–100%）。
   - 进程 CPU：`/proc/self/stat` utime+stime / wall（单核=100%）。
-  - 输入：`bus.jpg` letterbox 到 640×640，RGB NHWC uint8 `.npy`。
+  - 输入：默认与模型输入同 shape/dtype 的全 0 数据（测速与输入内容无关）；可选 `--input xxx.npy` 用真实图片。
 - 交叉验证：`/opt/bin/ax_run_model -w 10 -r 100`（纯 NPU，无 Python/后处理）。
 - `LD_LIBRARY_PATH=/opt/lib`（板端 axengine 0.1.3 需要）。
 
 ## 对客户问题的建议回复
 
 > U8、U16、混合量化编译出来的 axmodel 都只有 NPU 子图，不存在“部分算子跑 CPU”的情况；Pulsar2 的编译日志和产物结构可以直接给客户看（`GraphType.NPU` ×1，无 `GraphType.CPU`）。
-> 板端 CPU 占用主要来自推理循环里每帧固定的 host 开销（输入准备、输出 dequant/搬运、Python 框架开销，约 4.8 ms/帧），以及 demo 自身做的后处理。模型越快（U8 > 混合 > U16），每秒处理的帧数越多，CPU 占用反而越高：实测进程 CPU 分别为 43.2% / 34.7% / 23.6%。
+> 板端 CPU 占用主要来自推理循环里每帧固定的 host 开销（输入准备、输出 dequant/搬运、Python 框架开销，约 4.8 ms/帧），以及 demo 自身做的后处理。模型越快（U8 > 混合 > U16），每秒处理的帧数越多，CPU 占用反而越高：实测进程 CPU 分别为 42.7% / 34.7% / 23.7%。
 > 客户截图 54.9% @ 47.6 ms，按同一口径换算约 26 ms/帧的 CPU 工作，明显超出纯推理链路的 host 开销，建议排查其 demo 的后处理/画图/日志等逐帧 CPU 逻辑，或说明其 CPU usage 的采样方式。
 
 ## 复现入口
 
 - 仓库：`https://github.com/ZY-2012/yolo26.AXERA`
-- 主机分步脚本：`host/01_export_onnx.sh` … `host/08_summarize.sh`（授权自动处理，无需 export）
-- 板端脚本：`board/run_bench.sh` + `board/bench_cpu.py`
+- 主机一键：`bash host/run_all.sh`（导出 → 拆图 → 校准集 → 配置 → Pulsar2 量化编译；量化前激活 Pulsar2 环境）
+- 板端一键：`bash board/run_bench.sh`（推理 + CPU 对比 + 汇总表）
 - 原始数据：`results/bench_{u8,u16,mix}_r{1,2,3}.json`、`results/comparison.json`、`results/ax_run_model.txt`、`results/precision_summary.json`
 - 编译日志：`logs/{u8,u16,mix}.log`；产物：`models/*.axmodel`
 - 全程临时文件在 `.work_tmp/`，未使用 `/tmp`。

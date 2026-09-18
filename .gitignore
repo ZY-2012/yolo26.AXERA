@@ -7,4 +7,3 @@ dataset/*.tar
 onnx/*.pt
 __pycache__/
 *.pyc
-artifacts/

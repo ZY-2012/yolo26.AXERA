@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Board-side latency / CPU-usage benchmark for AX620E axmodels (axengine, no extra deps).
 
-CPU usage is reported two ways:
-  - system  : /proc/stat delta over the timed window (all cores, 0-100%)
-  - process : /proc/self/stat utime+stime delta / wall time (one core = 100%)
-
-The printed block matches the customer's "Benchmark Results" layout.
+- 默认用模型输入 shape 的全 0 数据测速（与 Axera 官方 benchmark 口径一致，耗时与数据无关）
+- 如需真实图片输入，额外传 --input xxx.npy（U8 NHWC 或模型声明的 dtype）
+- CPU 占用双口径：
+    system  : /proc/stat 基准窗口前后差值（全部核，0–100%）
+    process : /proc/self/stat utime+stime / wall（单核=100%）
+- 打印的 “Benchmark Results” 与客户提供的截图字段一致
 """
 
 from __future__ import annotations
@@ -23,7 +24,9 @@ import numpy as np
 try:
     import axengine
 except ImportError:
-    raise SystemExit("axengine not importable; run with LD_LIBRARY_PATH=/opt/lib")
+    raise SystemExit(
+        "无法导入 axengine：板端请先设置 LD_LIBRARY_PATH=/opt/lib（或安装好 axengine 运行库）"
+    )
 
 CLK_TCK = os.sysconf("SC_CLK_TCK")
 NCPU = os.cpu_count() or 1
@@ -34,12 +37,7 @@ def read_proc_stat_sum() -> tuple[int, int]:
     busy = total = 0
     with open("/proc/stat") as f:
         for line in f:
-            if not line.startswith("cpu") or line.startswith("cpu "):
-                if line.startswith("cpu "):
-                    parts = [int(x) for x in line.split()[1:]]
-                    idle = parts[3] + (parts[4] if len(parts) > 4 else 0)
-                    total += sum(parts)
-                    busy += sum(parts) - idle
+            if not line.startswith("cpu"):
                 continue
             parts = [int(x) for x in line.split()[1:]]
             idle = parts[3] + (parts[4] if len(parts) > 4 else 0)
@@ -62,13 +60,23 @@ def pct(values: list[float], p: float) -> float:
     return s[k]
 
 
-def bench(model: str, tensor: np.ndarray, warmup: int, repeat: int) -> dict:
+def make_input(meta, path: str | None) -> np.ndarray:
+    if path:
+        return np.load(path)
+    shape = tuple(int(d) for d in meta.shape)
+    try:
+        dtype = np.dtype(meta.dtype)  # pyaxengine NodeArg exposes numpy dtype
+    except (TypeError, ValueError):
+        dtype = np.dtype("float32")
+    return np.zeros(shape, dtype=dtype)
+
+
+def bench(model: str, input_path: str | None, warmup: int, repeat: int) -> dict:
     sess = axengine.InferenceSession(model)
     meta_in = sess.get_inputs()[0]
     name = meta_in.name
-    x = tensor
-    if tuple(meta_in.shape) != tuple(x.shape):
-        print(f"warn: input meta {meta_in.shape} != tensor {x.shape}, using tensor as-is")
+    x = make_input(meta_in, input_path)
+    print(f"input: {name} shape={tuple(x.shape)} dtype={x.dtype}")
 
     for _ in range(warmup):
         sess.run(None, {name: x})
@@ -87,15 +95,22 @@ def bench(model: str, tensor: np.ndarray, warmup: int, repeat: int) -> dict:
     sys_b1, sys_t1 = read_proc_stat_sum()
     proc1 = read_self_cpu_ticks()
 
-    sys_cpu = 100.0 * (sys_b1 - sys_b0) / max(1, sys_t1 - sys_t0)
-    proc_cpu = 100.0 * (proc1 - proc0) / CLK_TCK / wall
     return {
         "latency_ms": lat,
         "wall_s": wall,
-        "sys_cpu_pct": sys_cpu,
-        "proc_cpu_pct": proc_cpu,
+        "sys_cpu_pct": 100.0 * (sys_b1 - sys_b0) / max(1, sys_t1 - sys_t0),
+        "proc_cpu_pct": 100.0 * (proc1 - proc0) / CLK_TCK / wall,
         "ncpu": NCPU,
     }
+
+
+def get_chip() -> str:
+    for p in ("/proc/ax_proc/chip_type", "/proc/ax_proc/version"):
+        try:
+            return Path(p).read_text().strip()
+        except OSError:
+            continue
+    return "unknown"
 
 
 def report(model: str, r: dict) -> dict:
@@ -136,15 +151,6 @@ def report(model: str, r: dict) -> dict:
     }
 
 
-def get_chip() -> str:
-    for p in ("/proc/ax_proc/chip_type", "/proc/ax_proc/version"):
-        try:
-            return Path(p).read_text().strip()
-        except OSError:
-            continue
-    return "unknown"
-
-
 def idle_baseline(seconds: float) -> dict:
     b0, t0 = read_proc_stat_sum()
     time.sleep(seconds)
@@ -157,18 +163,17 @@ def idle_baseline(seconds: float) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True)
-    ap.add_argument("--input", required=True, help=".npy U8 NHWC tensor")
+    ap.add_argument("--input", default="", help="可选：.npy 输入；默认用全 0 数据")
     ap.add_argument("--warmup", type=int, default=10)
     ap.add_argument("--repeat", type=int, default=100)
     ap.add_argument("--json", default="")
     ap.add_argument("--idle-seconds", type=float, default=0.0)
     args = ap.parse_args()
 
-    tensor = np.load(args.input)
     results = {"chip": get_chip(), "model": args.model, "input": args.input}
     if args.idle_seconds > 0:
         results["idle"] = idle_baseline(args.idle_seconds)
-    r = bench(args.model, tensor, args.warmup, args.repeat)
+    r = bench(args.model, args.input or None, args.warmup, args.repeat)
     results["bench"] = report(args.model, r)
     if args.json:
         Path(args.json).parent.mkdir(parents=True, exist_ok=True)
