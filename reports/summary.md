@@ -1,7 +1,7 @@
 # YOLO26n × AX620E(AX630C) U8 / U16 / 混合量化 CPU 占用对比复现
 
 日期：2026-09-18
-板子：`root@<board-ip>`（AX630C_CHIP / ChipType.MC20E，2 核，engine 2.7.2a）
+板子：`root@10.126.29.186`（AX630C_CHIP / ChipType.MC20E，2 核，engine 2.7.2a）
 工具链：Pulsar2 7.0（docker `docker-registry.aitsw.axera-tech.com/pulsar2:7.0`）
 模型：公开 ultralytics `yolo26n.pt`，end2end one2one 头切成 3 个输出（`output_split_0/1/2`，1×84×80×80 / 1×84×40×40 / 1×84×20×20），对齐客户 `exp_e3_mix.json` 的 42 个 layer 名与 output_processors。
 校准集：`dataset/images100.tar`（coco128 取 100 张）。
@@ -20,11 +20,11 @@
 
 ## 编译产物对比（AX620E，NPU2）
 
-| 变体 | U16 层 | 输出 cosine (split0/1/2) | 子图 | MACs | 估算 cycles | axmodel |
-|------|--------|--------------------------|------|------|-------------|---------|
-| U8（全 U8） | 0 | 0.99914 / 0.99077 / 0.97568 | 1 × NPU | 2.74 G | 6.00 M | 2.75 MB |
-| U16（全 U16） | DEFAULT→U16 | 0.99996 / 0.99902 / 0.99743 | 1 × NPU | 5.60 G | 13.57 M | 3.38 MB |
-| 混合（客户配置） | 42 个节点 | 0.99937 / 0.99105 / 0.97860 | 1 × NPU | 3.36 G | 8.34 M | 3.07 MB |
+| 变体 | U16 层 | 输出 cosine (split0/1/2) | MACs | 估算 cycles | axmodel |
+|------|--------|--------------------------|------|-------------|---------|
+| U8（全 U8） | 0 | 0.99914 / 0.99077 / 0.97568 | 2.74 G | 6.00 M | 2.75 MB |
+| U16（全 U16） | DEFAULT→U16 | 0.99996 / 0.99902 / 0.99743 | 5.60 G | 13.57 M | 3.38 MB |
+| 混合（客户配置） | 42 个节点 | 0.99937 / 0.99105 / 0.97860 | 3.36 G | 8.34 M | 3.07 MB |
 
 - 混合配置的 42 个 U16 layer 全部命中并生效（Layer Config Table 确认，含 `/model.10` C2PSA attn、`/model.22` attn、`/model.23/one2one_cv2/cv3` 各尺度、`/model.19`）。
 - 校准/编译日志无 unsupported / fallback 警告；U16 使 MACs 和 cycles 约为 U8 的 2 倍。

@@ -2,9 +2,7 @@
 
 Comparing YOLO26 inference at different quantization precision levels — **U8 / U16 / mixed precision on AX620E (AX630C)**.
 
-本仓库完整复现了 YOLO26n 在 AX620E 平台的导出、量化、编译与板端推理对比，用于回答一个具体问题：
-
-> U8 量化和 U16 量化所有算子都在 NPU，为什么混合量化的时候有些算子跑在了 CPU？
+本仓库完整实现了 YOLO26n 在 AX620E 平台的导出、量化、编译与板端推理对比：
 
 **结论：混合量化不会把算子放到 CPU。** 三个模型编译后都只有 1 个 NPU 子图、0 个 CPU 子图；板端 CPU 占用只由「每帧固定的 host 开销 ÷ 单帧耗时」决定，与精度分配无关。
 
@@ -12,11 +10,11 @@ Comparing YOLO26 inference at different quantization precision levels — **U8 /
 
 ### 编译产物（Pulsar2 7.0 / AX620E / NPU2）
 
-| 变体 | U16 层 | 输出 cosine (split0/1/2) | 子图 | MACs | 估算 cycles | axmodel |
-|------|--------|--------------------------|------|------|-------------|---------|
-| U8（全 U8） | 0 | 0.99914 / 0.99077 / 0.97568 | **1 × NPU** | 2.74 G | 6.00 M | 2.75 MB |
-| U16（全 U16） | DEFAULT→U16 | 0.99996 / 0.99902 / 0.99743 | **1 × NPU** | 5.60 G | 13.57 M | 3.38 MB |
-| 混合（`exp_e3_mix.json`） | 42 个节点 | 0.99937 / 0.99105 / 0.97860 | **1 × NPU** | 3.36 G | 8.34 M | 3.07 MB |
+| 变体 | U16 层 | 输出 cosine (split0/1/2) | MACs | 估算 cycles | axmodel |
+|------|--------|--------------------------|------|-------------|---------|
+| U8（全 U8） | 0 | 0.99914 / 0.99077 / 0.97568 | 2.74 G | 6.00 M | 2.75 MB |
+| U16（全 U16） | DEFAULT→U16 | 0.99996 / 0.99902 / 0.99743 | 5.60 G | 13.57 M | 3.38 MB |
+| 混合（`exp_e3_mix.json`） | 42 个节点 | 0.99937 / 0.99105 / 0.97860 | 3.36 G | 8.34 M | 3.07 MB |
 
 日志证据：`subgraph [0], group: 0, type: GraphType.NPU`、`fuse 1 subgraph(s)`，全日志无 `GraphType.CPU`（见 `logs/`、`results/build_summary.json`）。
 
@@ -53,10 +51,9 @@ reports/     summary.md（完整分析报告）
 
 ## 环境要求
 
-- x86_64 Linux + Docker（Pulsar2 7.0 镜像：`docker-registry.aitsw.axera-tech.com/pulsar2:7.0` 或官方 `pulsar2:7.0`）
+- x86_64 Linux + Docker（Pulsar2 7.0 镜像）
 - ultralytics 仓库（导出 ONNX 用，`ULTRALYTICS_REPO` 指定路径）
 - AX620E 系列开发板（本仓库在 AX630C / ChipType.MC20E 上验证），Python ≥3.8 + `axengine` + `numpy`
-- Pulsar2 7.0 driverless 授权：`/root/.hasplm/installed/32434/*.v2c`（`compile.py` 通过 `MAGNETAR_HASP_SRC` 挂载）
 
 ## 复现步骤
 
